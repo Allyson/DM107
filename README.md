@@ -1,14 +1,17 @@
 # DM107
 Projeto Final DM107
 
-Usando grails:
-Criar um projeto demo
+Criar um provedor de logistica
 
-$ grails create-app demo<br>
-$ cd demo<br>
-$ grails create-domain-class helloword.Person<br>
-_Editar o arquivo Person.groovi_<br>
-$ grails generate-all helloword.Person<br>
-$ grails run-app<br>
+_Funcionalidades:_
+* Gerenciar o status de entrega dos pedidos
+* Prover Web Services para cadastrar e atualizar os status dos pedidos
+* Prover instruções para o uso dos serviços do provedor de logistica
 
+_Requisitos:_
+* Controle de versão no GITHUB
+* Nome de DOMINIO (Criar uma url dot.tk)
+* Implementar em um Servidor da Amazom ou Windows Azure
+* O projeto deverá contemplar todas as operações envolvendo um banco de dados, tais
+como criação, busca, atualização e deleção.
 
