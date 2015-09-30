@@ -15,3 +15,9 @@ _Requisitos:_
 * O projeto deverá contemplar todas as operações envolvendo um banco de dados, tais
 como criação, busca, atualização e deleção.
 
+
+
+nodejs
+apt-get install nodejs npm
+onde npm é o gerenciador de pacotes do node
+
