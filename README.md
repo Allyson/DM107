@@ -15,3 +15,6 @@ _Requisitos:_
 * O projeto deverá contemplar todas as operações envolvendo um banco de dados, tais
 como criação, busca, atualização e deleção.
 
+Aula (03/10)
+ - Documentar a API do trabalho...
+ - 
