@@ -30,4 +30,5 @@ apt-get install libkrb5-dev build-essential binutils
 
 (03/10) Aula
 Usar para swagger para documentar as restAPI
+funçoes em java scrit sao como classes do java, e não sao como as funçoes do C
 
