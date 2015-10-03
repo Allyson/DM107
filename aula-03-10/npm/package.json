@@ -1,0 +1,19 @@
+{
+  "name": "MyFirstNPMapp",
+  "version": "0.1.0",
+  "description": "Using NPM for the first time",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "NPM",
+    "nodeJS"
+  ],
+  "author": "Allyson",
+  "license": "GNU",
+  "dependencies": {
+    "useful-string": "0.0.2"
+  }
+}
