@@ -10,4 +10,4 @@ function executor(callback,name){
 
 sayHellow("Teste");
 executor(sayHellow,"Allyson");
-
+executor(sayHellow);
