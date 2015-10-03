@@ -35,3 +35,4 @@ npm init -> inicia um projeto em NODE
 npm start -> Roda o projeto (tem que editar o arquivo package.json)
 npm install <package> --save (atualiza package.json) 
 depois basta usar npm install que todas as dependencias serão instaladas
+ver promises (github do edy)
