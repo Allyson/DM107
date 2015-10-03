@@ -1,6 +1,9 @@
 
+var printName = function(name) {
+	console.log("Olá, "+ name);
+}
 
-
+printName("Allyson");
 //Vetor
 [
 	'Teste',
@@ -12,9 +15,7 @@
 	'Teste6',
 	'Teste7',
 	'Teste8'
-].forEach(function(name){
-	console.log("Olá, "+ name);
-})
+].forEach(printName);
 
 
 
