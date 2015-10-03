@@ -21,3 +21,13 @@ nodejs
 apt-get install nodejs npm
 onde npm é o gerenciador de pacotes do node
 npm install express
+npm install express-generator
+
+Tutorial
+https://blog.openshift.com/day-27-restify-build-correct-rest-web-services-in-nodejs/
+
+apt-get install libkrb5-dev build-essential binutils
+
+(03/10) Aula
+Usar para swagger para documentar as restAPI
+
