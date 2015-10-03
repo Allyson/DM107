@@ -33,4 +33,5 @@ Usar para swagger para documentar as restAPI
 Funçoes em java scrit sao como classes do java, e não sao como as funçoes do C
 npm init -> inicia um projeto em NODE
 npm start -> Roda o projeto (tem que editar o arquivo package.json)
-
+npm install <package> --save (atualiza package.json) 
+depois basta usar npm install que todas as dependencias serão instaladas
