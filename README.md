@@ -17,4 +17,6 @@ como criação, busca, atualização e deleção.
 
 Aula (03/10)
  - Documentar a API do trabalho...
- - 
+ - Grails rest poc (Fazer o Download do jar)
+ - www.editor.swagger.io #Criar documentação usando swagger
+ -- Generate Server / Generate Client
