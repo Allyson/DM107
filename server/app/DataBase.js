@@ -95,8 +95,8 @@ function create_database(err){
 
 function connect_mysql_error(err){
 	if (err){
-		console.log("Não foi possivel connectar ao gerenciador de base de dados MySQL\nO sistema será encerrado.");
-		process.exit(1);	
+		console.log("Não foi possivel connectar ao gerenciador de base de dados MySQL\n");
+		//process.exit(1);	
 	}else{
 		console.log("MySQL connectado...");	
 	}
@@ -116,6 +116,25 @@ function connect_db_error(err,rows){
 }
 
 
-connection.connect(connect_mysql_error);
-connection.query("USE loja",connect_db_error);
+function init_database(){
+	connection.connect(connect_mysql_error);
+	connection.query("USE loja",connect_db_error);
+}
 
+
+function get_clientes(resp){
+	var teste;
+	connection.query("SELECT * from clientes",function (err,rows,fields){
+		if (!err){
+			for (var i in rows){
+				teste = teste + rows[i];
+			}
+			//for (var i in rows) {
+        		//	console.log('Post Titles: ', rows[i]);
+    			//}
+		}
+	});
+	console.log("Teste: ", teste);
+}
+module.exports = {init_database:init_database,
+                  get_clientes:get_clientes};

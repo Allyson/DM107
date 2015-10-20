@@ -1,8 +1,11 @@
 var express = require('express');
 var router = express.Router();
-
+var db = require('./DataBase');
 
 router.get('/', function(req, res) {
+	db.init_database();
+	var resp = db.get_clientes();
+	console.log(resp);
 	res.send("Retornar todos os pedidos");
 });
 
