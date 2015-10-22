@@ -122,19 +122,32 @@ function init_database(){
 }
 
 
-function get_clientes(resp){
-	var teste;
-	connection.query("SELECT * from clientes",function (err,rows,fields){
+function get_all_clientes(callback){
+	try{
+		connection.query("SELECT * from clientes",function (err,result){
 		if (!err){
-			for (var i in rows){
-				teste = teste + rows[i];
-			}
-			//for (var i in rows) {
-        		//	console.log('Post Titles: ', rows[i]);
-    			//}
+			callback(JSON.stringify(result));
+		}else{
+			callback(null);
 		}
 	});
-	console.log("Teste: ", teste);
+	}catch(ex){
+    		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+function get_cliente(id,callback){
+	try{
+		connection.query("SELECT * from clientes WHERE id=?",[id],function (err,result){
+		if (!err){
+			callback(JSON.stringify(result[0]));
+		}else{
+			callback(null);
+		}
+	});
+	}catch(ex){
+    		console.log("DB_EXCEPTION : " + ex);
+	}
 }
 module.exports = {init_database:init_database,
-                  get_clientes:get_clientes};
+                  get_all_clientes:get_all_clientes,
+		  get_cliente:get_cliente};
