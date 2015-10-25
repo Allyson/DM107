@@ -1,5 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="en">
+<script>
+	function getURL() {
+    		var x = document.URL;
+    		document.getElementById("demo").innerHTML = x;
+	}
+</script>
+
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -51,7 +60,12 @@
 							GET
 						</td>
 						<td>
-							<a href="http://127.0.0.1:8080/api/client">http://127.0.0.1:8080/api/client </a> 
+							<a href="#/api/client/">
+								<script type="text/javascript">
+									var newURL = window.location.protocol + "//" + window.location.host;
+									document.write(newURL+"/api/client/");
+								</script>	 
+							</a> 
 						</td>
 						<td>
 							Nada
@@ -60,7 +74,7 @@
 							
 								<div class="panel panel-default">
 									<div class="panel-heading">
-						 				<a class="panel-title collapsed" data-toggle="collapse"  href="#panel-element-764633">Objeto Json</a>
+						 				<a class="panel-title collapsed" data-toggle="collapse"  href="#panel-element-764633">Return OBJ</a>
 									</div>
 									<div id="panel-element-764633" class="panel-collapse collapse">
 										<div class="panel-body">
@@ -88,7 +102,12 @@
 							GET
 						</td>
 						<td>
-							<a href="http://127.0.0.1:8080/api/client/1">http://127.0.0.1:8080/api/client/:id </a> 
+							<a href="#/api/client/1">
+								<script type="text/javascript">
+									var newURL = window.location.protocol + "//" + window.location.host;
+									document.write(newURL+"/api/client/:id");
+								</script>	 
+							</a>
 						</td>
 						<td>
 							id
@@ -97,7 +116,7 @@
 					
 								<div class="panel panel-default">
 									<div class="panel-heading">
-						 				<a class="panel-title collapsed" data-toggle="collapse"  href="#panel-element-733622">Collapsible Group Item #2</a>
+						 				<a class="panel-title collapsed" data-toggle="collapse"  href="#panel-element-733622">Return OBJ</a>
 									</div>
 									<div id="panel-element-733622" class="panel-collapse collapse">
 										<div class="panel-body">
@@ -124,20 +143,32 @@
 							PUT
 						</td>
 						<td>
-							02/04/2012
+							<a href="#/api/client/1">
+								<script type="text/javascript">
+									var newURL = window.location.protocol + "//" + window.location.host;
+									document.write(newURL+"/api/client/:id");
+								</script>	 
+							</a>							
 						</td>
 						<td>
-							Declined
+							id,JSON
 						</td>
 <td>
 			
 								<div class="panel panel-default">
 									<div class="panel-heading">
-						 				<a class="panel-title collapsed" data-toggle="collapse"  href="#panel-element-733623">Collapsible Group Item #2</a>
+						 				<a class="panel-title collapsed" data-toggle="collapse"  href="#panel-element-733623">Return OBJ</a>
 									</div>
 									<div id="panel-element-733623" class="panel-collapse collapse">
 										<div class="panel-body">
-											Anim pariatur cliche...
+											<p><code>
+											{<br>
+        											   "nome": "NOME",<br>
+        											   "endereco": "ENDERECO",<br>
+        											   "telefone": "00000000",<br>
+        										 	  "email": "email@email.com"<br>
+    											}
+											</code></p>
 										</div>
 									</div>
 								</div>
@@ -152,20 +183,32 @@
 							POST
 						</td>
 						<td>
-							03/04/2012
+							<a href="#/api/client/">
+								<script type="text/javascript">
+									var newURL = window.location.protocol + "//" + window.location.host;
+									document.write(newURL+"/api/client/");
+								</script>	 
+							</a>
 						</td>
 						<td>
-							Pending
+							JSON
 						</td>
 <td>
 					
 								<div class="panel panel-default">
 									<div class="panel-heading">
-						 				<a class="panel-title collapsed" data-toggle="collapse"  href="#panel-element-733624">Collapsible Group Item #2</a>
+						 				<a class="panel-title collapsed" data-toggle="collapse"  href="#panel-element-733624">Return OBJ</a>
 									</div>
 									<div id="panel-element-733624" class="panel-collapse collapse">
 										<div class="panel-body">
-											Anim pariatur cliche...
+											<p><code>
+											{<br>
+        											   "nome": "NOME",<br>
+        											   "endereco": "ENDERECO",<br>
+        											   "telefone": "00000000",<br>
+        										 	  "email": "email@email.com"<br>
+    											}
+											</code></p>
 										</div>
 									</div>
 								</div>
@@ -180,26 +223,122 @@
 							DELETE
 						</td>
 						<td>
-							04/04/2012
+							<a href="#/api/client/1">
+								<script type="text/javascript">
+									var newURL = window.location.protocol + "//" + window.location.host;
+									document.write(newURL+"/api/client/:id");
+								</script>	 
+							</a>
 						</td>
 						<td>
-							Call in to confirm
+							id
 						</td>
-<td>
+						<td>
 						
-								<div class="panel panel-default">
+							<div class="panel panel-default">
 									<div class="panel-heading">
-						 				<a class="panel-title collapsed" data-toggle="collapse"  href="#panel-element-733625">Collapsible Group Item #2</a>
+						 				<a class="panel-title collapsed" data-toggle="collapse"  href="#panel-element-733625">Return OBJ</a>
 									</div>
 									<div id="panel-element-733625" class="panel-collapse collapse">
 										<div class="panel-body">
-											Anim pariatur cliche...
+											<p><code>
+											{<br>
+        											   "nome": "NOME",<br>
+        											   "endereco": "ENDERECO",<br>
+        											   "telefone": "00000000",<br>
+        										 	  "email": "email@email.com"<br>
+    											}
+											</code></p>
 										</div>
 									</div>
 								</div>
 						
 						</td>
 					</tr>
+<!-- //////////////////////////////////////////////////////////////////Produto///////////////////////////////////////////////-->
+					<tr class="danger">
+						<td>
+							produto
+						</td>
+						<td>
+							GET
+						</td>
+						<td>
+							<a href="#/api/product/">
+								<script type="text/javascript">
+									var newURL = window.location.protocol + "//" + window.location.host;
+									document.write(newURL+"/api/product/");
+								</script>	 
+							</a>
+						</td>
+						<td>
+							Nada
+						</td>
+<td>
+						
+								<div class="panel panel-default">
+									<div class="panel-heading">
+						 				<a class="panel-title collapsed" data-toggle="collapse"  href="#panel-element-733626">Return OBJ</a>
+									</div>
+									<div id="panel-element-733626" class="panel-collapse collapse">
+										<div class="panel-body">
+											<p><code>
+											{<br>
+    											"id": 1,<br>
+    											"descricao": "Produto 1",<br>
+    											"quantidade": 2,<br>
+    											"imagem": "URL_IMAGE",<br>
+    											"valor": 10<br>
+											}
+											</code></p>
+										</div>
+									</div>
+								</div>
+						
+						</td>
+					</tr>
+<tr class="danger">
+						<td>
+							produto
+						</td>
+						<td>
+							GET
+						</td>
+						<td>
+							<a href="#/api/product/1">
+								<script type="text/javascript">
+									var newURL = window.location.protocol + "//" + window.location.host;
+									document.write(newURL+"/api/product/:id");
+								</script>	 
+							</a>
+						</td>
+						<td>
+							id
+						</td>
+<td>
+						
+								<div class="panel panel-default">
+									<div class="panel-heading">
+						 				<a class="panel-title collapsed" data-toggle="collapse"  href="#panel-element-733627">Return OBJ</a>
+									</div>
+									<div id="panel-element-733627" class="panel-collapse collapse">
+										<div class="panel-body">
+											<p><code>
+											{<br>
+    											"id": 1,<br>
+    											"descricao": "Produto 1",<br>
+    											"quantidade": 2,<br>
+    											"imagem": "URL_IMAGE",<br>
+    											"valor": 10<br>
+											}
+											</code></p>
+										</div>
+									</div>
+								</div>
+						
+						</td>
+					</tr>
+<!-- //////////////////////////////////////////////////////////////////Produto///////////////////////////////////////////////-->
 				</tbody>
 				
 			</table>
