@@ -2,8 +2,28 @@
 <html lang="en">
 
 <script language="javascript" type="text/javascript">
+	var xmlHttp = new XMLHttpRequest();
+
 	function go_to_novo_cadastro(){
     		window.location.href = window.location.protocol + "//" + window.location.host + "";
+	}
+	var handler = function(){
+		if (xmlHttp.readyState == 4 && xmlHttp.status == 200){		
+			var cookie = "usuario=" + xmlHttp.responseText + "; expires=0";
+			document.cookie = cookie;			      		
+			parent.window.frames['loja_frame'].location="loja_compras.html";
+			
+		}else{
+			alert("Email não cadastrado.\nTente novamente ou faça seu cadastro");
+		}
+	}
+	function login(){
+		var user = document.getElementById('email').value;
+
+    		xmlHttp.open( "GET", window.location.protocol + "//" + window.location.host + "/api/client/email/" + user, false ); // false for synchronous request
+		xmlHttp.onload = handler;  		
+		xmlHttp.send( null );
+    		return true;
 	}
 </script>
   <head>
@@ -34,13 +54,13 @@
 						Email
 					</label>
 					<div class="col-sm-10">
-						<input class="form-control" id="inputEmail3" type="email">
+						<input class="form-control" id="email" type="email">
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						 
-						<button type="submit" class="btn btn-default">
+						<button type="button" class="btn btn-default" onclick='login();'>
 							Sign in
 						</button>
 

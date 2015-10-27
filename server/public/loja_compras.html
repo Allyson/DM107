@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<script>
+	var xmlHttp = new XMLHttpRequest();
+	var itens_comprados=0;
+	
+function get_usuario(){
+		var result = document.cookie.split(';');		
+		var aux = String(result).split('=');
+		var aux1 = String(aux[1]).split(',');
+		var aux2 = String(aux1[1]).split(':');
+		var username = String(aux2[1]).substring(1,String(aux2[1].length-1));		
+		document.getElementById('username').innerHTML = "Usuário:" + username;
+	}
+	
+	var handler = function(){
+		if (xmlHttp.readyState == 4 && xmlHttp.status == 200){		
+			var produtos = JSON.parse(xmlHttp.responseText);
+
+			var col = 0;	
+			var row = 0;	
+			produtos.forEach(function(x){
+				alert(x.descricao);
+				if (col == 0){ //Criar nova linha
+					//var html = "<div id=\"Linha_" + row + "\" class=\"row\"> <\div>";
+					var html = "<tr id='Linha_" + row +"'>"; 
+					row++;
+					$('#show_produtos').append($(html));
+				}
+				//Criando Produto			
+				//var html_produto = "<div id='Coluna_" + col + "' class='col-md-4'> <div class='row' align='center'> <img max-height='5px' max-width='5px' class='img-rounded' alt='Bootstrap Image Preview' src='" + x.imagem + "' /> </div>";
+			        //html_produto = html_produto + "<div class='row' align='center' > <button type='button' onclick='comprar(" + x.id +")'> Comprar</button></div> </div>";
+				
+				var html_produto = "<td align='center'> <img height='200' width='200' src='" + x.imagem + "' /></td>";
+				html_produto = html_produto + "<td align='center'> <button type='button' onclick='comprar(" + x.id +")'> Comprar</button></td>";
+				$('#Linha_' + row).append($(html_produto));
+				col++;
+				if (col >=3){
+					col = 0;
+				}
+			});
+			alert("Col = " + col +" \n Row = " + row );
+			
+		}else{
+			alert("Nenhum produto encontrado");
+		}
+	}
+
+	function show_all_produtos(){
+		xmlHttp.open( "GET", window.location.protocol + "//" + window.location.host + "/api/product/", true ); // false for synchronous request
+		xmlHttp.onload = handler;  		
+		xmlHttp.send( null );
+	}
+
+	function comprar(id){
+		itens_comprados = itens_comprados +1;
+		alert("Comprou (" + id + ") \n Total= " + itens_comprados);
+	}
+</script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Bootstrap 3, from LayoutIt!</title>
+
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+  </head>
+  <body onload="get_usuario();show_all_produtos();">
+
+    <div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-6">
+					<h5 id="username" class="text-left">
+						user
+					</h5>
+				</div>
+				<div class="col-md-6">
+					<h5 class="text-right">
+						Itens no carrinho = 0
+					</h5>
+				</div>
+			</div>
+			<h3 class="text-center">
+				Bem vindo à loja do futuro.
+			</h3>
+			<button id="teste" type="button" onclick="return show_all_produtos('teste')">TESTE</button> 
+			
+			<table id="show_produtos">
+
+			</table>
+
+		</div>
+	</div>
+</div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/scripts.js"></script>
+  </body>
+</html>

@@ -13,18 +13,18 @@
 		
 	}
 	function make_post(){
-		//var jsonOBJ = {};
 	        var jsonOBJ = {
 			nome : String(document.getElementById('nome').value),
 			endereco : String(document.getElementById('endereco').value),
 			telefone : String(document.getElementById('telefone').value),
 			email : String(document.getElementById('email').value)
 		};
-		xmlhttp.open("POST", "http://127.0.0.1:8080/api/client");
+		xmlhttp.open("POST", window.location.protocol + "//" + window.location.host + "/api/client");
 		xmlhttp.setRequestHeader('X-PINGOTHER', 'pingpong');
 		xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 		xmlhttp.onreadystatechange = handler;
-		xmlhttp.send(JSON.stringify(jsonOBJ));			
+		xmlhttp.send(JSON.stringify(jsonOBJ));	
+		window.location.replace("loja.html");		
 	}
 
 	
@@ -79,6 +79,9 @@
 				</div>
 				<button type="button" class="btn btn-default" onclick='make_post()'>
 					Submit
+				</button>
+				<button type="button" class="btn btn-default" onclick='window.location.replace("loja.html")'>
+					Back
 				</button>
 			</form>
 		</div>
