@@ -3,7 +3,7 @@
   <head>
 <script>
 	var xmlHttp = new XMLHttpRequest();
-	var itens_comprados=0;
+	var carrinho="";
 	
 function get_usuario(){
 		var result = document.cookie.split(';');		
@@ -13,56 +13,97 @@ function get_usuario(){
 		var username = String(aux2[1]).substring(1,String(aux2[1].length-1));		
 		document.getElementById('username').innerHTML = "Usuário:" + username;
 	}
+	function monta_produto(produto,callback){
+		var painel = document.createElement('painel');
+		var img = document.createElement('img');
+		img.setAttribute("height","300");
+		img.setAttribute("width","300");
+		img.setAttribute("src",produto.imagem);
+		img.innerHTML="TESTE img";
+		var button = document.createElement('button');
+		button.setAttribute("onclick","comprar(" + produto.id +")");
+		button.setAttribute("style","position:relative; width: 70px; height: 30px;");
+		button.innerHTML = "Comprar";
+		var div1 = document.createElement('div');
+		var div2 = document.createElement('div');
+		div2.setAttribute("style","position:relative; width: 300px; height: 30px;text-align:center;");
+		var label = document.createElement('label');
+		label.innerHTML="Preço: R$" + produto.valor + "<br>Quantidade: "+ produto.quantidade;
+		div1.appendChild(img);
+		div2.appendChild(button);
+		painel.appendChild(div1);
+		painel.appendChild(label);
+		painel.appendChild(div2);
+		callback(painel);
+	}
 	
 	var handler = function(){
 		if (xmlHttp.readyState == 4 && xmlHttp.status == 200){		
 			var produtos = JSON.parse(xmlHttp.responseText);
 
+			var tableBodyEl = document.querySelector("table#show_produtos>tbody");
+		    //var i=0, keys=[], key="", row={};
 			var col = 0;	
-			var row = 0;	
+			var row = 0;
+			var tr;	
 			produtos.forEach(function(x){
-				alert(x.descricao);
 				if (col == 0){ //Criar nova linha
-					//var html = "<div id=\"Linha_" + row + "\" class=\"row\"> <\div>";
-					var html = "<tr id='Linha_" + row +"'>"; 
+			//		//var html = "<div id=\"Linha_" + row + "\" class=\"row\"> <\div>";
+			//		var html = "<tr id='Linha_" + row +"'>"; 
+					tr = document.createElement('tr');
+					tr.setAttribute("id", "linha_" + row);
 					row++;
-					$('#show_produtos').append($(html));
+			//		$("#show_produtos").append($(html));
+					tableBodyEl.appendChild(tr);
 				}
 				//Criando Produto			
 				//var html_produto = "<div id='Coluna_" + col + "' class='col-md-4'> <div class='row' align='center'> <img max-height='5px' max-width='5px' class='img-rounded' alt='Bootstrap Image Preview' src='" + x.imagem + "' /> </div>";
-			        //html_produto = html_produto + "<div class='row' align='center' > <button type='button' onclick='comprar(" + x.id +")'> Comprar</button></div> </div>";
+			    //html_produto = html_produto + "<div class='row' align='center' > <button type='button' onclick='comprar(" + x.id +")'> Comprar</button></div> </div>";
 				
-				var html_produto = "<td align='center'> <img height='200' width='200' src='" + x.imagem + "' /></td>";
-				html_produto = html_produto + "<td align='center'> <button type='button' onclick='comprar(" + x.id +")'> Comprar</button></td>";
-				$('#Linha_' + row).append($(html_produto));
+				var td = document.createElement('td');
+			//	td.innerHTML ="<img height='200' width='300' src='" + x.imagem + "'/><button type='button' onclick='comprar("+ x.id + ")'>Comprar</button>";
+				monta_produto(x,function(resp){
+					td.appendChild(resp);
+				});
+
 				col++;
 				if (col >=3){
 					col = 0;
 				}
+				tr.appendChild(td);
+				console.log("Linha = " + row + "Coluna = " + col);
+
 			});
-			alert("Col = " + col +" \n Row = " + row );
-			
 		}else{
 			alert("Nenhum produto encontrado");
 		}
 	}
 
 	function show_all_produtos(){
-		xmlHttp.open( "GET", window.location.protocol + "//" + window.location.host + "/api/product/", true ); // false for synchronous request
+		xmlHttp.open( "GET", window.location.protocol + "//" + window.location.host + "/api/product/", false); // false for synchronous request
 		xmlHttp.onload = handler;  		
 		xmlHttp.send( null );
 	}
-
+	var itens=0;
 	function comprar(id){
-		itens_comprados = itens_comprados +1;
-		alert("Comprou (" + id + ") \n Total= " + itens_comprados);
+		carrinho = carrinho + id + ";";
+		itens++;
+		document.getElementById('show_carrinho').innerHTML="Itens no carrinho =" + itens
 	}
+	function checkout(){
+		var i;
+		var load='loja_checkout.html?itens=' + carrinho;
+		console.log(load);
+		window.location = load;
+	}
+	window.addEventListener( "load", show_all_produtos);
+
 </script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Bootstrap 3, from LayoutIt!</title>
+    <title>Loja do futuro</title>
 
     <meta name="description" content="Source code generated using layoutit.com">
     <meta name="author" content="LayoutIt!">
@@ -71,7 +112,7 @@ function get_usuario(){
     <link href="css/style.css" rel="stylesheet">
 
   </head>
-  <body onload="get_usuario();show_all_produtos();">
+  <body onload="get_usuario();">
 
     <div class="container-fluid">
 	<div class="row">
@@ -81,20 +122,24 @@ function get_usuario(){
 					<h5 id="username" class="text-left">
 						user
 					</h5>
+					<a href="loja.html">Sair</a>
 				</div>
 				<div class="col-md-6">
+					<h5 id="show_carrinho" class="text-right">
+						Itens no carrinho = 0 
+					</h5>
 					<h5 class="text-right">
-						Itens no carrinho = 0
+						<a href="#" onclick="checkout()"> Checkout</a>
 					</h5>
 				</div>
 			</div>
 			<h3 class="text-center">
 				Bem vindo à loja do futuro.
 			</h3>
-			<button id="teste" type="button" onclick="return show_all_produtos('teste')">TESTE</button> 
-			
-			<table id="show_produtos">
-
+			<table id="show_produtos" width="100%" border="0">
+				<tbody>
+						
+				</tbody>
 			</table>
 
 		</div>
