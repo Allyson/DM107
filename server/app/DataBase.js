@@ -21,16 +21,16 @@ function create_fake_data(){
 	make_query("INSERT INTO clientes (nome,endereco,telefone,email) VALUES (\"Carlos\",\"Rua h\",\"353471-9714\",\"carlos@inatel.br\")");
 	make_query("INSERT INTO clientes (nome,endereco,telefone,email) VALUES (\"Luiz\",\"Rua w\",\"353471-9656\",\"luiz@inatel.br\")");
 	console.log("Creating fake data into \"clientes\"...\n");
-
-	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 1\",1000,150.00,\"http://www.google.com.br/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0CAMQjRxqFQoTCMO56bnx2cgCFcoekAodTYoGEQ&url=http%3A%2F%2Fwiikipedia.wikia.com%2Fwiki%2FFile%3ANo_Image_Available.png&psig=AFQjCNHLe-AbyLSkRqeqtYTaO_yjL4Pkyw&ust=1445734126869531\")");
-	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 2\",1000,200.00,\"http://www.google.com.br/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0CAMQjRxqFQoTCMO56bnx2cgCFcoekAodTYoGEQ&url=http%3A%2F%2Fwiikipedia.wikia.com%2Fwiki%2FFile%3ANo_Image_Available.png&psig=AFQjCNHLe-AbyLSkRqeqtYTaO_yjL4Pkyw&ust=1445734126869531\")");
-	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 3\",1000,400.00,\"http://www.google.com.br/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0CAMQjRxqFQoTCMO56bnx2cgCFcoekAodTYoGEQ&url=http%3A%2F%2Fwiikipedia.wikia.com%2Fwiki%2FFile%3ANo_Image_Available.png&psig=AFQjCNHLe-AbyLSkRqeqtYTaO_yjL4Pkyw&ust=1445734126869531\")");
-	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 4\",1000,550.00,\"http://www.google.com.br/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0CAMQjRxqFQoTCMO56bnx2cgCFcoekAodTYoGEQ&url=http%3A%2F%2Fwiikipedia.wikia.com%2Fwiki%2FFile%3ANo_Image_Available.png&psig=AFQjCNHLe-AbyLSkRqeqtYTaO_yjL4Pkyw&ust=1445734126869531\")");
-	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 5\",1000,550.00,\"http://www.google.com.br/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0CAMQjRxqFQoTCMO56bnx2cgCFcoekAodTYoGEQ&url=http%3A%2F%2Fwiikipedia.wikia.com%2Fwiki%2FFile%3ANo_Image_Available.png&psig=AFQjCNHLe-AbyLSkRqeqtYTaO_yjL4Pkyw&ust=1445734126869531\")");
-	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 6\",1000,10.00,\"http://www.google.com.br/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0CAMQjRxqFQoTCMO56bnx2cgCFcoekAodTYoGEQ&url=http%3A%2F%2Fwiikipedia.wikia.com%2Fwiki%2FFile%3ANo_Image_Available.png&psig=AFQjCNHLe-AbyLSkRqeqtYTaO_yjL4Pkyw&ust=1445734126869531\")");
-	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 7\",1000,1000.00,\"http://www.google.com.br/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0CAMQjRxqFQoTCMO56bnx2cgCFcoekAodTYoGEQ&url=http%3A%2F%2Fwiikipedia.wikia.com%2Fwiki%2FFile%3ANo_Image_Available.png&psig=AFQjCNHLe-AbyLSkRqeqtYTaO_yjL4Pkyw&ust=1445734126869531\")");
-	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 8\",1000,1100.00,\"http://www.google.com.br/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0CAMQjRxqFQoTCMO56bnx2cgCFcoekAodTYoGEQ&url=http%3A%2F%2Fwiikipedia.wikia.com%2Fwiki%2FFile%3ANo_Image_Available.png&psig=AFQjCNHLe-AbyLSkRqeqtYTaO_yjL4Pkyw&ust=1445734126869531\")");
-	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 9\",1000,2000.00,\"http://www.google.com.br/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0CAMQjRxqFQoTCMO56bnx2cgCFcoekAodTYoGEQ&url=http%3A%2F%2Fwiikipedia.wikia.com%2Fwiki%2FFile%3ANo_Image_Available.png&psig=AFQjCNHLe-AbyLSkRqeqtYTaO_yjL4Pkyw&ust=1445734126869531\")");
+http://vignette3.wikia.nocookie.net/wiisportsresortwalkthrough/images/6/60/No_Image_Available.png/revision/latest?cb=20140118173446
+	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 1\",1000,150.00,\" http://vignette3.wikia.nocookie.net/wiisportsresortwalkthrough/images/6/60/No_Image_Available.png/revision/latest?cb=20140118173446\")");
+	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 2\",1000,200.00,\" http://vignette3.wikia.nocookie.net/wiisportsresortwalkthrough/images/6/60/No_Image_Available.png/revision/latest?cb=20140118173446\")");
+	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 3\",1000,400.00,\" http://vignette3.wikia.nocookie.net/wiisportsresortwalkthrough/images/6/60/No_Image_Available.png/revision/latest?cb=20140118173446\")");
+	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 4\",1000,550.00,\" http://vignette3.wikia.nocookie.net/wiisportsresortwalkthrough/images/6/60/No_Image_Available.png/revision/latest?cb=20140118173446\")");
+	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 5\",1000,550.00,\" http://vignette3.wikia.nocookie.net/wiisportsresortwalkthrough/images/6/60/No_Image_Available.png/revision/latest?cb=20140118173446\")");
+	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 6\",1000,10.00,\" http://vignette3.wikia.nocookie.net/wiisportsresortwalkthrough/images/6/60/No_Image_Available.png/revision/latest?cb=20140118173446\")");
+	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 7\",1000,1000.00,\" http://vignette3.wikia.nocookie.net/wiisportsresortwalkthrough/images/6/60/No_Image_Available.png/revision/latest?cb=20140118173446\")");
+	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 8\",1000,1100.00,\" http://vignette3.wikia.nocookie.net/wiisportsresortwalkthrough/images/6/60/No_Image_Available.png/revision/latest?cb=20140118173446\")");
+	make_query("INSERT INTO produtos (descricao,quantidade,valor,imagem) VALUES (\"Produto 9\",1000,2000.00,\" http://vignette3.wikia.nocookie.net/wiisportsresortwalkthrough/images/6/60/No_Image_Available.png/revision/latest?cb=20140118173446\")");
 	console.log("Creating fake data into \"produtos\"...\n");
 
 	make_query("INSERT INTO pedidos (id_cliente,data) VALUES ('1',NOW())");
@@ -147,6 +147,19 @@ function get_cliente(id,callback){
 		});
 	}catch(ex){
     		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+function get_cliente_by_email(email,callback){
+	try{
+		connection.query("SELECT * from clientes WHERE email=?",[email],function (err,result){
+			if (!err){
+				callback(JSON.stringify(result[0]));
+			}else{
+				callback(null);
+			}
+		});
+	}catch(ex){
+		console.log("DB_EXCEPTION : " + ex);
 	}
 }
 function get_last_cliente(callback){
@@ -347,6 +360,7 @@ function delete_produto(id,callback){
 module.exports = {init_database:init_database,
                   get_all_clientes:get_all_clientes,
 		  get_cliente:get_cliente,
+		  get_cliente_by_email:get_cliente_by_email,
 		  post_cliente:post_cliente,
 		  put_cliente:put_cliente,
 		  delete_cliente:delete_cliente,
