@@ -23,6 +23,7 @@ function get_usuario(){
 		var button = document.createElement('button');
 		button.setAttribute("onclick","comprar(" + produto.id +")");
 		button.setAttribute("style","position:relative; width: 70px; height: 30px;");
+		button.setAttribute("id",produto.id);
 		button.innerHTML = "Comprar";
 		var div1 = document.createElement('div');
 		var div2 = document.createElement('div');
@@ -88,7 +89,8 @@ function get_usuario(){
 	function comprar(id){
 		carrinho = carrinho + id + ";";
 		itens++;
-		document.getElementById('show_carrinho').innerHTML="Itens no carrinho =" + itens
+		document.getElementById('show_carrinho').innerHTML="Itens no carrinho =" + itens;
+		document.getElementById(id).disabled = true;
 	}
 	function checkout(){
 		var i;

@@ -122,6 +122,11 @@ function init_database(){
 	connection.query("USE loja",connect_db_error);
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function get_all_clientes(callback){
 	try{
@@ -247,7 +252,10 @@ function delete_cliente(id,callback){
 	}
 }
 ///////////////////////////////////////////// PRODUTO////////////////////////////////////////////////////////////
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function get_all_produtos(callback){
 	try{
 		connection.query("SELECT * from produtos",function (err,result){
@@ -357,6 +365,246 @@ function delete_produto(id,callback){
 	}
 }
 
+////////////////////////////////////////////// PEDIDO /////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function extend(target) {
+    var sources = [].slice.call(arguments, 1);
+    sources.forEach(function (source) {
+        for (var prop in source) {
+            target[prop] = source[prop];
+        }
+    });
+    return target;
+}
+
+function get_all_pedidos(callback){
+	try{
+		connection.query("select * from pedidos",function (err,result_p){
+		if (!err){
+			callback(JSON.stringify(result_p));
+		}else{
+			callback(null);
+		}
+	});
+	}catch(ex){
+    		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+function get_pedido(id,callback){
+	try{
+		//select * from pedidos 
+		connection.query("SELECT * from pedidos WHERE id=?",[id],function (err,result){
+			if (!err){
+				callback(JSON.stringify(result[0]));
+			}else{
+				callback(null);
+			}
+		});
+	}catch(ex){
+    		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+function get_last_pedido(callback){
+	try{
+		connection.query("SELECT * from pedidos WHERE id=LAST_INSERT_ID()",function (err,result){
+			if (!err){
+				callback(JSON.stringify(result[0]));
+			}else{
+				callback(null);
+			}
+		});
+	}catch(ex){
+    		console.log("DB_EXCEPTION : " + ex);
+	}
+
+}
+function post_pedido(json,callback){
+	if ((json.descricao == null)||(json.quantidade==null)||(json.valor==null)) {
+		callback(null);
+	}
+	try{               //    "INSERT INTO clientes (nome,endereco,telefone,email) VALUES (\"José\",\"Rua x\",\"353471-9666\",\"jose@inatel.br\")");
+		connection.query("INSERT INTO pedidos (id_cliente,data) VALUES (?,?)",
+				[json.id_cliente,json.data],
+				function(err,result){
+					if (!err){
+						get_last_pedido(function(data){
+							if (data != null){
+								callback(data);
+							}
+						});
+					}else{
+						callback(null);
+					}
+				});
+
+	}catch(ex){
+		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+function put_pedido(id,json,callback){
+	if ((json.id_cliente == null)||(json.data==null)) {
+		callback(null);
+	}
+	try{               //    "INSERT INTO clientes (nome,endereco,telefone,email) VALUES (\"José\",\"Rua x\",\"353471-9666\",\"jose@inatel.br\")");
+		connection.query("UPDATE pedidos SET id_cliente=?,data=? WHERE id=?",
+				[json.id_cliente,json.data,id],
+				function(err,result){
+					if (!err){
+						get_pedido(id,function(data){
+							if (data!=null){
+								callback(data);
+							}
+						});
+					}else{
+						callback(null);
+					}
+				});
+
+	}catch(ex){
+		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+function delete_pedido(id,callback){
+	try{
+		var deleted='';
+		get_pedido(id,function(data){
+			if (data!=null){
+				deleted=data;
+			}else{
+				callback(null);
+			}
+		});
+
+		connection.query("DELETE from pedidos WHERE id=?",[id],function (err,result){
+			if (!err){
+				callback(deleted);
+			}else{
+				callback(null);
+			}
+		});
+	}catch(ex){
+    		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+
+////////////////////////////////////////////// ITENS /////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function get_all_itens(callback){
+	try{
+		connection.query("select * from itens",function (err,result){
+		if (!err){
+			callback(JSON.stringify(result));
+		}else{
+			callback(null);
+		}
+	});
+	}catch(ex){
+    		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+function get_item(id,callback){
+	try{
+		//select * from pedidos 
+		connection.query("SELECT * from itens WHERE id=?",[id],function (err,result){
+			if (!err){
+				callback(JSON.stringify(result[0]));
+			}else{
+				callback(null);
+			}
+		});
+	}catch(ex){
+    		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+function get_last_item(callback){
+	try{
+		connection.query("SELECT * from itens WHERE id=LAST_INSERT_ID()",function (err,result){
+			if (!err){
+				callback(JSON.stringify(result[0]));
+			}else{
+				callback(null);
+			}
+		});
+	}catch(ex){
+    		console.log("DB_EXCEPTION : " + ex);
+	}
+
+}
+function post_item(json,callback){ //id_pedido | id_cliente | id_produto | quantidade
+	if ((json.id_pedido == null)||(json.id_produto==null)||(json.id_cliente==null)||(json.quantidade==null)) {
+		callback(null);
+	}
+	try{               //    "INSERT INTO clientes (nome,endereco,telefone,email) VALUES (\"José\",\"Rua x\",\"353471-9666\",\"jose@inatel.br\")");
+		connection.query("INSERT INTO itens (id_pedido,id_cliente,id_produto,quantidade) VALUES (?,?,?,?)",
+				[json.id_pedido,json.id_cliente,json.id_produto,json.quantidade],
+				function(err,result){
+					if (!err){
+						get_last_item(function(data){
+							if (data != null){
+								callback(data);
+							}
+						});
+					}else{
+						callback(null);
+					}
+				});
+
+	}catch(ex){
+		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+function put_item(id,json,callback){
+	if ((json.id_pedido == null)||(json.id_produto==null)||(json.id_cliente==null)||(json.quantidade==null)) {
+		callback(null);
+	}
+	try{               //    "INSERT INTO clientes (nome,endereco,telefone,email) VALUES (\"José\",\"Rua x\",\"353471-9666\",\"jose@inatel.br\")");
+		connection.query("UPDATE itens SET id_cliente=?,id_produto=?,id_pedido=?,quantidade=? WHERE id=?",
+				[json.id_cliente, json.id_produto, json.id_pedido, json.quantidade, id],
+				function(err,result){
+					if (!err){
+						get_item(id,function(data){
+							if (data!=null){
+								callback(data);
+							}
+						});
+					}else{
+						callback(null);
+					}
+				});
+
+	}catch(ex){
+		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+function delete_item(id,callback){
+	try{
+		var deleted='';
+		get_item(id,function(data){
+			if (data!=null){
+				deleted=data;
+			}else{
+				callback(null);
+			}
+		});
+
+		connection.query("DELETE from itens WHERE id=?",[id],function (err,result){
+			if (!err){
+				callback(deleted);
+			}else{
+				callback(null);
+			}
+		});
+	}catch(ex){
+    		console.log("DB_EXCEPTION : " + ex);
+	}
+}
 module.exports = {init_database:init_database,
                   get_all_clientes:get_all_clientes,
 		  get_cliente:get_cliente,
@@ -368,4 +616,9 @@ module.exports = {init_database:init_database,
 		  get_produto:get_produto,
 		  post_produto:post_produto,
 		  put_produto:put_produto,
-		  delete_produto:delete_produto};
+		  delete_produto:delete_produto,
+		  get_all_pedidos:get_all_pedidos,
+		  get_pedido:get_pedido,
+		  post_pedido:post_pedido,
+		  put_pedido:put_pedido,
+		  delete_pedido:delete_pedido};
