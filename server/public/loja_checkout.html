@@ -1,0 +1,49 @@
+<html>
+<head>
+<script>
+	var xmlHttp = new XMLHttpRequest();
+
+	var handler = function(){
+		if (xmlHttp.readyState == 4 && xmlHttp.status == 200){		
+			var produto = JSON.parse(xmlHttp.responseText);
+			var tableBodyEl = document.querySelector("table#carrinho>tbody");
+			var tr = document.createElement('tr');
+			var td_descricao = document.createElement('td');
+			var td_valor=document.createElement('td');
+			var td_quantidade=document.createElement('td');
+			td_descricao.innerHTML=produto.descricao;
+			td_valor.innerHTML="R$"+produto.valor;
+			tr.appendChild(td_descricao);
+			tr.appendChild(td_valor);
+			tr.appendChild(td_quantidade);
+			tableBodyEl.appendChild(tr);
+		}
+	}
+	function get_carrinho_produtos(id){
+		xmlHttp.open( "GET", window.location.protocol + "//" + window.location.host + "/api/product/"+id, false); // false for synchronous request
+		xmlHttp.onload = handler;  		
+		xmlHttp.send( null );
+	}
+
+	function parameters(){
+		var parameters = location.search.substring(1).split("&");
+		var temp = parameters[0].split("=");
+		var temp1 = String(temp).split(";");
+		var i;
+
+		for (i=0;i<temp1.length;i++){
+			get_carrinho_produtos(temp1[i]);
+			console.log(temp1[i]);
+		}
+		
+	}
+	window.addEventListener( "load", parameters);
+</script>
+</head>
+<body>
+	<table id="carrinho">
+		<tbody></tbody>
+	</table>
+</body>
+
+</html>
