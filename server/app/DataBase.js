@@ -83,10 +83,10 @@ function create_database(err){
 	console.log("Created table \"pedidos\"...\n");
 	connection.query("CREATE TABLE itens" +
 			"(id INT NOT NULL AUTO_INCREMENT,"+
-			"id_pedido INT NOT NULL,"+
-			"id_cliente INT NOT NULL,"+
-			"id_produto INT NOT NULL,"+
-			"quantidade INT NOT NULL,"+
+			"id_pedido INT ,"+
+			"id_cliente INT,"+
+			"id_produto INT ,"+
+			"quantidade INT ,"+
 			"PRIMARY KEY (id))",query_error()); //Creating itens table
 	console.log("Created table \"itens\"...\n");
 	connection.query("CREATE TABLE produtos"+
@@ -127,7 +127,9 @@ function init_database(){
 	connection.connect(connect_mysql_error);
 	connection.query("USE loja",connect_db_error);
 }
-
+function end_database(){
+	connection.end();
+}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -390,7 +392,13 @@ function get_all_pedidos(callback){
 					resp.push({"id":result_p[i].id,
 						"id_cliente":result_p[i].id_cliente,
 						"data":result_p[i].data,
-						"itens":[]});
+						"itens":[{
+									"id":result_p[i].iten_id,
+									 "id_pedido":result_p[i].id_pedido,
+									 "id_cliente":result_p[i].id_cliente,
+									 "id_produto": result_p[i].id_produto,
+									"quantidade": result_p[i].quantidade}
+									]});
 					last_id = result_p[i].id;
 					position++;
 				}else{
@@ -402,8 +410,8 @@ function get_all_pedidos(callback){
 				}
 				
 			}
-			//callback(JSON.stringify(result_p));
-			callback(JSON.stringify(resp));
+			//callback(result_p);
+			callback(resp);
 		}else{
 			callback(null);
 		}
@@ -416,7 +424,9 @@ function get_pedido(id,callback){
 	try{
 		//select * from pedidos 
 		connection.query("SELECT *,itens.id AS iten_id FROM itens INNER JOIN pedidos ON itens.id_pedido=pedidos.id WHERE pedidos.id=?",[id],function (err,result){
+		//connection.query("SELECT * FROM pedidos WHERE id=?",[id],function (err,result){
 			if (!err){
+				//callback(result);
 				var resp=[];
 				var i;
 				var last_id;
@@ -442,7 +452,7 @@ function get_pedido(id,callback){
 													 "quantidade": result[i].quantidade});
 					}
 				}
-				callback(JSON.stringify(resp));
+				callback(resp);
 			}else{
 				console.log("get_pedido ERRO");
 				callback(null);
@@ -456,7 +466,7 @@ function get_last_pedido(callback){
 	try{
 		//
 		//connection.query("SELECT *,itens.id AS iten_id FROM pedidos ORDER BY pedidos.id DESC INNER JOIN itens ON itens.id_pedido=pedidos.id",function (err,result){
-		 connection.query("SELECT * FROM pedidos ORDER BY id DESC LIMIT 1",function (err,result){
+		connection.query("SELECT * FROM pedidos ORDER BY id DESC LIMIT 1",function (err,result){
 			if (!err){
 				console.log("Last pedido");
 				callback(result[0]);
@@ -480,7 +490,7 @@ function get_last_pedido(callback){
 				// 									 "quantidade": result[i].quantidade});
 				// 	}
 				// }
-				// callback(JSON.stringify(resp));
+				//callback(JSON.stringify(resp));
 			}else{
 				callback(null);
 			}
@@ -491,7 +501,7 @@ function get_last_pedido(callback){
 
 }
 function post_pedido(json,callback){
-	if ((json.id_cliente == null)||(json.data==null)) {
+	if ((json.id_cliente == null)||(json.data==null)||json.itens==null) {
 		callback(null);
 	}
 	try{               //    "INSERT INTO clientes (nome,endereco,telefone,email) VALUES (\"José\",\"Rua x\",\"353471-9666\",\"jose@inatel.br\")");
@@ -499,41 +509,47 @@ function post_pedido(json,callback){
 		connection.query("INSERT INTO pedidos (id_cliente,data) VALUES (?,?)",
 				[json.id_cliente,json.data],
 				function(err,result){
-					console.log("Pedido gravado");
 					if (!err){
-						var i;
-						get_last_pedido(function(pedido){
-							pedido_id = pedido.id;
-							console.log("Pedido id = " + pedido.id);
-							console.log("ID Cliente = "+ json.id_cliente);
-							console.log("Iten[0].id_produto = "+json.itens[0].id_produto);
-							console.log("Iten[0].quantidade = "+json.itens[0].quantidade);
-							console.log("JSON = "+ json.itens.length);
-
-							for (i=0;i<json.itens.length;i++){
-								console.log("Loop = "+i);
-								connection.query("INSERT INTO itens (id_pedido,id_cliente,id_produto,quantidade ) VALUES (?,?,?,?)",
-									[pedido.id,json.id_cliente,json.itens[i].id_produto,json.itens[i].quantidade],
-									function(err,result){
-										console.log("Gravando itens");
-										if (err){
-											callback(null);
-										}
-									});
-								}
-						});
-						get_pedido(pedido_id,function(data){
-							console.log("Pedido ID resp =" + pedido_id);
-							if (data != null){
-								console.log(data);
-						 		callback(data); //Ja esta em formato JSON
-						 	}
+						get_last_pedido(function(data){
+							callback(data);
 						});
 					}else{
 						callback(null);
 					}
-				});
+				// 	console.log("Pedido gravado");
+				// 	if (!err){
+				// 		var i;
+				// 		get_last_pedido(function(pedido){
+				// 			pedido_id = pedido.id;
+				// 			console.log("Pedido id = " + pedido.id);
+				// 			console.log("ID Cliente = "+ json.id_cliente);
+				// 			console.log("Iten[0].id_produto = "+json.itens[0].id_produto);
+				// 			console.log("Iten[0].quantidade = "+json.itens[0].quantidade);
+				// 			console.log("JSON = "+ json.itens.length);
 
+				// 			for (i=0;i<json.itens.length;i++){
+				// 				console.log("Loop = "+i);
+				// 				connection.query("INSERT INTO itens (id_pedido,id_cliente,id_produto,quantidade ) VALUES (?,?,?,?)",
+				// 					[pedido.id,json.id_cliente,json.itens[i].id_produto,json.itens[i].quantidade],
+				// 					function(err,result){
+				// 						console.log("Gravando itens");
+				// 						if (err){
+				// 							callback(null);
+				// 						}
+				// 					});
+				// 				}
+				// 		});
+				// 		get_pedido(pedido_id,function(data){
+				// 			console.log("Pedido ID resp =" + pedido_id);
+				// 			if (data != null){
+				// 				console.log(data);
+				// 		 		callback(data); //Ja esta em formato JSON
+				// 		 	}
+				// 		});
+				// 	}else{
+				// 		callback(null);
+				// 	}
+			    });
 	}catch(ex){
 		console.log("DB_EXCEPTION : " + ex);
 	}
@@ -594,7 +610,7 @@ function get_all_itens(callback){
 	try{
 		connection.query("select * from itens",function (err,result){
 		if (!err){
-			callback(JSON.stringify(result));
+			callback(result);
 		}else{
 			callback(null);
 		}
@@ -608,7 +624,7 @@ function get_item(id,callback){
 		//select * from pedidos 
 		connection.query("SELECT * from itens WHERE id=?",[id],function (err,result){
 			if (!err){
-				callback(JSON.stringify(result[0]));
+				callback(result[0]);
 			}else{
 				callback(null);
 			}
@@ -617,11 +633,27 @@ function get_item(id,callback){
     		console.log("DB_EXCEPTION : " + ex);
 	}
 }
+function get_item_from_pedido(id){
+	try{
+		console.log("GET_ITEM_FROM_PEDIDO() "+id);
+		connection.query("SELECT * from itens WHERE id_pedido=?",[id],function (err,result){
+			if (!err){
+				console.log("GET_ITEM_FROM_PEDIDO return data valid");
+				return (result);
+			}else{
+				console.log("GET_ITEM_FROM_PEDIDO return null");
+				return null;
+			}
+		});
+	}catch(ex){
+    		console.log("DB_EXCEPTION : " + ex);
+	}
+}
 function get_last_item(callback){
 	try{
-		connection.query("SELECT * from itens WHERE id=LAST_INSERT_ID()",function (err,result){
+		connection.query("SELECT * FROM itens ORDER BY id DESC LIMIT 1",function (err,result){
 			if (!err){
-				callback(JSON.stringify(result[0]));
+				callback(result[0]);
 			}else{
 				callback(null);
 			}
@@ -631,21 +663,27 @@ function get_last_item(callback){
 	}
 
 }
+var i;
 function post_item(json,callback){ //id_pedido | id_cliente | id_produto | quantidade
-	if ((json.id_pedido == null)||(json.id_produto==null)||(json.id_cliente==null)||(json.quantidade==null)) {
-		callback(null);
-	}
 	try{               //    "INSERT INTO clientes (nome,endereco,telefone,email) VALUES (\"José\",\"Rua x\",\"353471-9666\",\"jose@inatel.br\")");
+		console.log("POST_ITEM()");
 		connection.query("INSERT INTO itens (id_pedido,id_cliente,id_produto,quantidade) VALUES (?,?,?,?)",
 				[json.id_pedido,json.id_cliente,json.id_produto,json.quantidade],
 				function(err,result){
+					console.log("POST_ITEM->query");
 					if (!err){
 						get_last_item(function(data){
+							console.log("POST_ITEM() -> GET_LAST_ITEM()");
+							console.log(data);
 							if (data != null){
 								callback(data);
+							}else{
+								console.log("POST_ITEM() return null");
+								callback(null);
 							}
 						});
 					}else{
+						console.log("Erro DB post_item()");
 						callback(null);
 					}
 				});
@@ -700,6 +738,7 @@ function delete_item(id,callback){
 	}
 }
 module.exports = {init_database:init_database,
+				end_database:end_database,
                   get_all_clientes:get_all_clientes,
 		  get_cliente:get_cliente,
 		  get_cliente_by_email:get_cliente_by_email,
@@ -715,4 +754,6 @@ module.exports = {init_database:init_database,
 		  get_pedido:get_pedido,
 		  post_pedido:post_pedido,
 		  put_pedido:put_pedido,
-		  delete_pedido:delete_pedido};
+		  delete_pedido:delete_pedido,
+		  get_item_from_pedido:get_item_from_pedido,
+		  post_item:post_item};

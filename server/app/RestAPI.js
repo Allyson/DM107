@@ -163,8 +163,40 @@ router.get('/order', function(req, res) {
 	db.init_database();
 	db.get_all_pedidos(function(data){
 		if (data!=null){
+			// var pedidos =[]; 
+			// var i;
+			// for (i=0;i<data.length;i++){
+			// 	pedidos.push({
+			// 		"id":data[i].id,
+			// 		"id_cliente":data[i].id_cliente,
+			// 		"data":data[i].data,
+			// 		"itens":[]
+			// 	});
+			// 	//db.get_item_from_pedido(pedidos[i].id,function(data1){
+			// 	var data1 = db.get_item_from_pedido(pedidos[i].id);
+			// 		if (data1!=null){
+			// 			var j;
+			// 			console.log("Size - " + data1.length);
+			// 			for (j=0;j<data1.length;j++){
+			// 				console.log("ID - "+data1[j].id);
+			// 				console.log("I - "+ i);
+							
+			// 				pedidos[0].itens.push({
+			// 				 	"id" : data1[j].id,
+			// 				 	"id_pedido" : data1[j].id_pedido,
+			// 				 	"id_cliente" : data1[j].id_cliente,
+			// 				 	"id_produto" : data1[j].id_produto,
+			// 				 	"quantidate" : data1[j].quantidate
+			// 				 });
+			// 			}
+			// 		}else{
+			// 			console.log("Pedido sem itens cadastrados");
+			// 		}
+			// 	//});
+			// }
 			res.writeHead(200, {'Content-Type' : 'x-application/json'});
-        		res.end(data);
+        	
+        	res.end(JSON.stringify(data));
 		}else{
 			res.status(404).send('Not found!');
 		}
@@ -176,7 +208,7 @@ router.get('/order/:id', function(req, res) {
 	db.get_pedido(req.params.id,function(data){
 		if (data!=null){
 			res.writeHead(200, {'Content-Type' : 'x-application/json'});
-        		res.end(data);
+        		res.end(JSON.stringify(data));
 		}else{
 			res.status(404).send('Not found!');
 		}
@@ -185,12 +217,66 @@ router.get('/order/:id', function(req, res) {
 
 router.post('/order', function(req, res) {
 	db.init_database();
-	db.post_pedido(req.body,function(data){
+	var sleep = require('sleep'); 
+	sleep.sleep(2);
+	console.log("Itens: API interface");
+	var pedido={"id_cliente":req.body.id_cliente,
+				"data":req.body.data
+			};
+	var i=0;
+	var itens=[];
+	// for (i=0;i<req.body.itens.length;i++){
+	// 	itens.push({
+	// 		"id":req.body.itens[i].id,
+	// 		"id_clinete":req.body.itens[i].id_cliente,
+	// 		"id_pedido":req.body.itens[i].id_pedido,
+	// 		"id_produto":req.body.itens[i].id_produto,
+	// 		"quantidade":req.body.itens[i].quantidade
+	// 	});
+	// }	
+	db.post_pedido(pedido,function(data){
 		if (data!=null){
+			i=0;
+			var item = {
+			"id":req.body.itens[i].id,
+			"id_clinete":req.body.itens[i].id_cliente,
+			"id_pedido":data.id,
+			"id_produto":req.body.itens[i].id_produto,
+			"quantidade":req.body.itens[i].quantidade
+			};
+			console.log("item");
+			console.log(item);
+				
+				
+				var callback = function(resp){
+					// if (resp==null){
+					// 	console.log("Erro itens");
+					// 	res.status(400).send('Bad Request!');						
+					// }else{
+						i++;
+						if (i<req.body.itens.length){
+							var item2 = {
+								"id":req.body.itens[i].id,
+								"id_clinete":req.body.itens[i].id_cliente,
+								"id_pedido":data.id,
+								"id_produto":req.body.itens[i].id_produto,
+								"quantidade":req.body.itens[i].quantidade
+								};
+								console.log("item2");
+								console.log(item2);
+							db.post_item(item2,callback);
+						}
+					//}
+				};//fim callback
+				
+				db.post_item(item,callback);
+			
 			res.writeHead(200, {'Content-Type' : 'x-application/json'});
-        		res.end(data);
+   //      	db.get_pedido(data.id,function(resp1){
+         		res.end("resp1");
+   //      	});
 		}else{
-			console.log("Erro");
+			console.log("Erro pedido");
 			res.status(400).send('Bad Request!');
 		}
 	});
