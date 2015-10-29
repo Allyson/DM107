@@ -77,7 +77,7 @@ function create_database(err){
 	console.log("Created table \"clientes\"...\n");
 	connection.query("CREATE TABLE pedidos" +
 			"(id INT NOT NULL AUTO_INCREMENT,"+
-			"id_cliente INT NOT NULL,"+
+			"id_cliente INT,"+
 			"data VARCHAR(30)," +
 			"PRIMARY KEY (id))",query_error());  //Creating pedidos table
 	console.log("Created table \"pedidos\"...\n");
@@ -126,9 +126,6 @@ function connect_db_error(err,rows){
 function init_database(){
 	connection.connect(connect_mysql_error);
 	connection.query("USE loja",connect_db_error);
-}
-function end_database(){
-	connection.end();
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -380,6 +377,7 @@ function delete_produto(id,callback){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function get_all_pedidos(callback){
 	try{
+		console.log("GET_ALL_PEDIDOS()");
 		//connection.query("select * from pedidos",function (err,result_p){
 		connection.query("SELECT *,itens.id AS iten_id FROM itens INNER JOIN pedidos ON itens.id_pedido=pedidos.id",function (err,result_p){
 		if (!err){
@@ -463,12 +461,12 @@ function get_pedido(id,callback){
 	}
 }
 function get_last_pedido(callback){
+	console.log("DB>GET_LAST_PEDIDO()");
 	try{
 		//
 		//connection.query("SELECT *,itens.id AS iten_id FROM pedidos ORDER BY pedidos.id DESC INNER JOIN itens ON itens.id_pedido=pedidos.id",function (err,result){
 		connection.query("SELECT * FROM pedidos ORDER BY id DESC LIMIT 1",function (err,result){
 			if (!err){
-				console.log("Last pedido");
 				callback(result[0]);
 				// var resp=[];
 				// var i;
@@ -492,6 +490,7 @@ function get_last_pedido(callback){
 				// }
 				//callback(JSON.stringify(resp));
 			}else{
+				console.log("DB>GET_LAST_PEDIDO return error");
 				callback(null);
 			}
 		});
@@ -501,8 +500,11 @@ function get_last_pedido(callback){
 
 }
 function post_pedido(json,callback){
-	if ((json.id_cliente == null)||(json.data==null)||json.itens==null) {
+	console.log("DB>POST_PEDIDO()");
+	if ((json.id_cliente == null)||(json.data==null)) {
+		console.log("DB>POST_PEDIDO:Existem variaveis igual a null");
 		callback(null);
+		return;
 	}
 	try{               //    "INSERT INTO clientes (nome,endereco,telefone,email) VALUES (\"José\",\"Rua x\",\"353471-9666\",\"jose@inatel.br\")");
 		var pedido_id;
@@ -511,9 +513,12 @@ function post_pedido(json,callback){
 				function(err,result){
 					if (!err){
 						get_last_pedido(function(data){
-							callback(data);
+							console.log("DB>POST_PEDIDO: LAST_PEDIDO:");
+							console.log(data);
+							callback(data); // at´e aqui OK
 						});
 					}else{
+						console.log("DB>POST_PEDIDO: return error");
 						callback(null);
 					}
 				// 	console.log("Pedido gravado");
@@ -738,7 +743,6 @@ function delete_item(id,callback){
 	}
 }
 module.exports = {init_database:init_database,
-				end_database:end_database,
                   get_all_clientes:get_all_clientes,
 		  get_cliente:get_cliente,
 		  get_cliente_by_email:get_cliente_by_email,

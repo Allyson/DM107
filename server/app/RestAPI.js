@@ -9,7 +9,7 @@ var db = require('./DataBase');
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.get('/client',function(req,res){
 	console.log("get clientes");
-	db.init_database();
+	// db.init_database();
 	db.get_all_clientes(function(data){
 		if (data!=null){
 			res.writeHead(200, {'Content-Type' : 'x-application/json'});
@@ -21,7 +21,7 @@ router.get('/client',function(req,res){
 });
 router.get('/client/:id',function(req,res){
 	console.log("get cliente");
-	db.init_database();
+	// db.init_database();
 	db.get_cliente(req.params.id,function(data){
 		if (data!=null){
 			res.writeHead(200, {'Content-Type' : 'x-application/json'});
@@ -33,7 +33,7 @@ router.get('/client/:id',function(req,res){
 });
 router.get('/client/email/:email',function(req,res){
 	console.log("get cliente by email");
-	db.init_database();
+	// db.init_database();
 	db.get_cliente_by_email(req.params.email,function(data){
 		if (data!=null){
 			res.writeHead(200, {'Content-Type' : 'x-application/json'});
@@ -49,7 +49,7 @@ router.post('/client',function(req,res){
 		console.log("post cliente");
 		console.log("req = " + JSON.stringify(req.body));
 
-		db.init_database();
+		// db.init_database();
 		db.post_cliente(req.body,function(data){
 			if (data!=null){
 				res.writeHead(200, {'Content-Type' : 'x-application/json'});
@@ -66,7 +66,7 @@ router.post('/client',function(req,res){
 });
 router.put('/client/:id',function(req,res){
 	console.log("put cliente");
-	db.init_database();
+	// db.init_database();
 
 	db.put_cliente(req.params.id,req.body,function(data){
 		if (data!=null){
@@ -80,7 +80,7 @@ router.put('/client/:id',function(req,res){
 });
 router.delete('/client/:id',function(req,res){
 	console.log("delete cliente");
-	db.init_database();
+	// db.init_database();
 	db.delete_cliente(req.params.id,function(data){
 		if (data!=null){
 			res.writeHead(200, {'Content-Type' : 'x-application/json'});
@@ -97,7 +97,7 @@ router.delete('/client/:id',function(req,res){
 ///////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.get('/product',function(req,res){
-	db.init_database();
+	// db.init_database();
 	db.get_all_produtos(function(data){
 		if (data!=null){
 			res.writeHead(200, {'Content-Type' : 'x-application/json'});
@@ -108,7 +108,7 @@ router.get('/product',function(req,res){
 	});
 });
 router.get('/product/:id',function(req,res){
-	db.init_database();
+	// db.init_database();
 	db.get_produto(req.params.id,function(data){
 		if (data!=null){
 			res.writeHead(200, {'Content-Type' : 'x-application/json'});
@@ -119,7 +119,7 @@ router.get('/product/:id',function(req,res){
 	});
 });
 router.post('/product',function(req,res){
-	db.init_database();
+	// db.init_database();
 	db.post_produto(req.body,function(data){
 		if (data!=null){
 			res.writeHead(200, {'Content-Type' : 'x-application/json'});
@@ -131,7 +131,7 @@ router.post('/product',function(req,res){
 	});
 });
 router.put('/product/:id',function(req,res){
-	db.init_database();
+	// db.init_database();
 
 	db.put_produto(req.params.id,req.body,function(data){
 		if (data!=null){
@@ -144,7 +144,7 @@ router.put('/product/:id',function(req,res){
 	});
 });
 router.delete('/product/:id',function(req,res){
-	db.init_database();
+	// db.init_database();
 	db.delete_produto(req.params.id,function(data){
 		if (data!=null){
 			res.writeHead(200, {'Content-Type' : 'x-application/json'});
@@ -160,7 +160,7 @@ router.delete('/product/:id',function(req,res){
 ///////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.get('/order', function(req, res) {
-	db.init_database();
+	
 	db.get_all_pedidos(function(data){
 		if (data!=null){
 			// var pedidos =[]; 
@@ -204,7 +204,7 @@ router.get('/order', function(req, res) {
 });
 
 router.get('/order/:id', function(req, res) {
-	db.init_database();
+	// db.init_database();
 	db.get_pedido(req.params.id,function(data){
 		if (data!=null){
 			res.writeHead(200, {'Content-Type' : 'x-application/json'});
@@ -216,10 +216,9 @@ router.get('/order/:id', function(req, res) {
 });
 
 router.post('/order', function(req, res) {
-	db.init_database();
-	var sleep = require('sleep'); 
-	sleep.sleep(2);
-	console.log("Itens: API interface");
+	// db.init_database();
+
+	console.log("POST_ORDER()");
 	var pedido={"id_cliente":req.body.id_cliente,
 				"data":req.body.data
 			};
@@ -233,57 +232,62 @@ router.post('/order', function(req, res) {
 	// 		"id_produto":req.body.itens[i].id_produto,
 	// 		"quantidade":req.body.itens[i].quantidade
 	// 	});
-	// }	
-	db.post_pedido(pedido,function(data){
-		if (data!=null){
-			i=0;
-			var item = {
-			"id":req.body.itens[i].id,
-			"id_clinete":req.body.itens[i].id_cliente,
-			"id_pedido":data.id,
-			"id_produto":req.body.itens[i].id_produto,
-			"quantidade":req.body.itens[i].quantidade
-			};
-			console.log("item");
-			console.log(item);
-				
-				
-				var callback = function(resp){
-					// if (resp==null){
-					// 	console.log("Erro itens");
-					// 	res.status(400).send('Bad Request!');						
-					// }else{
-						i++;
-						if (i<req.body.itens.length){
-							var item2 = {
-								"id":req.body.itens[i].id,
-								"id_clinete":req.body.itens[i].id_cliente,
-								"id_pedido":data.id,
-								"id_produto":req.body.itens[i].id_produto,
-								"quantidade":req.body.itens[i].quantidade
-								};
-								console.log("item2");
-								console.log(item2);
-							db.post_item(item2,callback);
-						}
-					//}
-				};//fim callback
-				
-				db.post_item(item,callback);
-			
-			res.writeHead(200, {'Content-Type' : 'x-application/json'});
-   //      	db.get_pedido(data.id,function(resp1){
-         		res.end("resp1");
-   //      	});
+	//}	
+	var pedido_gravado;
+	db.post_pedido(pedido,function(pedido){
+		if (pedido!=null){
+			pedido_gravado = pedido;		
 		}else{
-			console.log("Erro pedido");
+			console.log(pedido);
+			console.log("Erro inserindo pedido");
 			res.status(400).send('Bad Request!');
+			res.end();
 		}
 	});
+	// i=0;
+	// var item = {
+	// "id":req.body.itens[i].id,
+	// "id_clinete":req.body.itens[i].id_cliente,
+	// "id_pedido":data.id,
+	// "id_produto":req.body.itens[i].id_produto,
+	// "quantidade":req.body.itens[i].quantidade
+	// };
+	// console.log("item:");
+	// console.log(item);
+				
+				
+	// var callback = function(resp){
+	// 	// if (resp==null){
+	// 	// 	console.log("Erro itens");
+	// 	// 	res.status(400).send('Bad Request!');						
+	// 	// }else{
+	// 	i++;
+	// 	if (i<req.body.itens.length){
+	// 		var item2 = {
+	// 			"id":req.body.itens[i].id,
+	// 			"id_clinete":req.body.itens[i].id_cliente,
+	// 			"id_pedido":data.id,
+	// 			"id_produto":req.body.itens[i].id_produto,
+	// 			"quantidade":req.body.itens[i].quantidade
+	// 			};
+	// 			console.log("item2");
+	// 			console.log(item2);
+	// 		db.post_item(item2,callback);
+	// 	}
+	// 	//}
+	// };//fim callback
+		
+	// db.post_item(item,callback);
+		
+	// res.writeHead(200, {'Content-Type' : 'x-application/json'});
+ //   //      	db.get_pedido(data.id,function(resp1){
+ //         		res.end("resp1");
+ //   //      	});
+		
 });
 
 router.put('/order/:id', function(req, res) {
-	db.init_database();
+	// db.init_database();
 
 	db.put_pedido(req.params.id,req.body,function(data){
 		if (data!=null){
@@ -297,7 +301,7 @@ router.put('/order/:id', function(req, res) {
 });
 
 router.delete('/order:id', function(req, res) {
-	db.init_database();
+	// db.init_database();
 	db.delete_pedido(req.params.id,function(data){
 		if (data!=null){
 			res.writeHead(200, {'Content-Type' : 'x-application/json'});
