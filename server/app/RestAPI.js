@@ -223,7 +223,6 @@ router.post('/order', function(req, res) {
 				"data":req.body.data
 			};
 	var i=0;
-	var itens=[];
 	// for (i=0;i<req.body.itens.length;i++){
 	// 	itens.push({
 	// 		"id":req.body.itens[i].id,
@@ -232,11 +231,28 @@ router.post('/order', function(req, res) {
 	// 		"id_produto":req.body.itens[i].id_produto,
 	// 		"quantidade":req.body.itens[i].quantidade
 	// 	});
-	//}	
-	var pedido_gravado;
+	
 	db.post_pedido(pedido,function(pedido){
 		if (pedido!=null){
-			pedido_gravado = pedido;		
+			for (i=0; i<req.body.itens.length;i++)
+			{
+					var item = {
+						"id":req.body.itens[i].id,
+						"id_clinete":req.body.id_cliente,
+						"id_pedido":pedido.id,
+						"id_produto":req.body.itens[i].id_produto,
+						"quantidade":req.body.itens[i].quantidade
+					};
+					db.post_item(item,function(resp){
+						console.log("ITEM ("+ i +")");
+						console.log(resp);
+					});
+			}
+
+			db.get_pedido(pedido.id,function(resp1){
+          		res.writeHead(200, {'Content-Type' : 'x-application/json'});
+				res.end(JSON.stringify(resp1));
+          	});
 		}else{
 			console.log(pedido);
 			console.log("Erro inserindo pedido");
@@ -244,45 +260,11 @@ router.post('/order', function(req, res) {
 			res.end();
 		}
 	});
-	// i=0;
-	// var item = {
-	// "id":req.body.itens[i].id,
-	// "id_clinete":req.body.itens[i].id_cliente,
-	// "id_pedido":data.id,
-	// "id_produto":req.body.itens[i].id_produto,
-	// "quantidade":req.body.itens[i].quantidade
-	// };
-	// console.log("item:");
-	// console.log(item);
-				
-				
-	// var callback = function(resp){
-	// 	// if (resp==null){
-	// 	// 	console.log("Erro itens");
-	// 	// 	res.status(400).send('Bad Request!');						
-	// 	// }else{
-	// 	i++;
-	// 	if (i<req.body.itens.length){
-	// 		var item2 = {
-	// 			"id":req.body.itens[i].id,
-	// 			"id_clinete":req.body.itens[i].id_cliente,
-	// 			"id_pedido":data.id,
-	// 			"id_produto":req.body.itens[i].id_produto,
-	// 			"quantidade":req.body.itens[i].quantidade
-	// 			};
-	// 			console.log("item2");
-	// 			console.log(item2);
-	// 		db.post_item(item2,callback);
-	// 	}
-	// 	//}
-	// };//fim callback
-		
-	// db.post_item(item,callback);
-		
+					
+	
+
 	// res.writeHead(200, {'Content-Type' : 'x-application/json'});
- //   //      	db.get_pedido(data.id,function(resp1){
- //         		res.end("resp1");
- //   //      	});
+ //   //      	
 		
 });
 
