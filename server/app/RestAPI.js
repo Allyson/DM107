@@ -300,5 +300,61 @@ router.get('/logistics/',function(req,res){
 		}
 	})
 });
+router.get('/logistics/:id',function(req,res){
+	db.get_entrega(req.params.id,function(data){
+		if (data!=null){
+			res.writeHead(200, {'Content-Type' : 'x-application/json'});
+        	res.end(JSON.stringify(data));
+		}else{
+			console.log("Erro");
+			res.status(404).send('Not found!');
+		}
+	})
+});
+router.put('/logistics/:id', function(req, res) {
+	db.put_entrega(req.params.id,req.body,function(data){
+		if (data!=null){
+			res.writeHead(200, {'Content-Type' : 'x-application/json'});
+        		res.end(JSON.stringify(data));
+		}else{
+			console.log("Erro");
+			res.status(404).send('Not found!');
+		}
+	});
+});
+/*
+    "id": 8,
+    "id_pedido": 1,
+    "id_cliente": 1,
+    "nome_recebedor": null,
+    "cpf_recebedor": null,
+    "recebedor_e_comprador": null,
+    "data_hora_entrega": null,
+    "gps": null,
+    "status": null
+*/
+router.post('/logistics/',function(req,res){
+	var entrega={"id_pedido":req.body.id_pedido,
+				"id_cliente":req.body.id_cliente,
+				"nome_recebedor":"",
+				"cpf_recebedor":"",
+				"recebedor_e_comprador":"",
+				"data_hora_entrega":"",
+				"gps":"",
+				"status":"pendente"
+			};
+			console.log(entrega);
+	db.post_entrega(entrega,function(data){
+		if (data!=null){
+			console.log("API - POST");
+			console.log(data);
+			res.writeHead(200, {'Content-Type' : 'x-application/json'});
+        	res.end(JSON.stringify(data));
+		}else{
+			console.log("Erro");
+			res.status(404).send('Not found!');
+		}
+	})
+});
 
 module.exports = router;

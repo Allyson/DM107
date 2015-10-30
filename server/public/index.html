@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+  	<script>
+  		function refrech(name){
+  			var ifr = document.getElementsByName(name);
+    		ifr.src = ifr.src;
+  		}
+  	</script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,16 +34,16 @@
 			<div class="tabbable" id="tabs-28789">
 				<ul class="nav nav-tabs">
 					<li class="active">
-						<a href="#panel-161305" data-toggle="tab">Documentação API</a>
+						<a href="#panel-161305" data-toggle="tab" onclick="refrech(doc_frame)" >Documentação API</a>
 					</li>
 					<li>
-						<a href="#panel-264924" data-toggle="tab">Simulador Loja</a>
+						<a href="#panel-264924" data-toggle="tab" onclick="refrech(loja_frame)">Simulador Loja</a>
 					</li>
 					<li>
-						<a href="#panel-264925" data-toggle="tab">Simulador Logistica</a>
+						<a href="#panel-264925" data-toggle="tab" onclick="refrech(logistica_frame)">Simulador Logistica</a>
 					</li>
 					<li>
-						<a href="#panel-264926" data-toggle="tab">Graficos</a>
+						<a href="#panel-264926" data-toggle="tab" onclick="refrech(graph_frame)">Graficos</a>
 					</li>
 				</ul>
 				<div class="tab-content">

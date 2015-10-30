@@ -101,8 +101,22 @@
   		xmlHttp.open("POST", window.location.protocol + "//" + window.location.host + "/api/order", true);
   		xmlHttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
   		xmlHttp.send(JSON.stringify(obj));
-  		alert("Pedido cadastrado com sucesso");
-  		window.location.replace("loja.html");
+  		post_entrega(obj,function(){
+  			alert("Pedido cadastrado com sucesso");
+  			window.location.replace("loja.html");	
+  		});
+  		
+	}
+	function post_entrega(obj,callback){
+  		xmlHttp.open("POST", window.location.protocol + "//" + window.location.host + "/api/logistics", true);
+  		xmlHttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+  		var logistica_obj={
+	        "id_pedido": obj.id,
+	        "id_cliente": obj.id_cliente,
+	        "status": "pendente"
+    	};
+  		xmlHttp.send(JSON.stringify(logistica_obj));
+  		callback();
 	}
 	function fechar(){
 		//cadastrar o pedido

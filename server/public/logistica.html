@@ -32,7 +32,7 @@
 				b_entregar.innerHTML="Entregar";
 				b_entregar.setAttribute("onclick","entregar("+x.id+")");
 				if (x.status !="pendente"){
-					b_entregar.setAttribute("enable",false);
+					b_entregar.setAttribute("disabled",true);
 				}
 				td_entregar.appendChild(b_entregar);
 				tr.appendChild(td_descricao);
@@ -48,25 +48,31 @@
 		if (xmlHttp.readyState == 4 && xmlHttp.status == 200){		
 			var entrega = JSON.parse(xmlHttp.responseText);
 			var recebedor = prompt("Digite o nome do recebedor:", "");
-    		var cpf_recebedor = prompt("Digite o CPF do recebedor:", "");
-    		var recebedor_e_comprador=prompt("O recebedor é o comprador? <SIM/NAO>", "");
-    	
-	    	if ((recebedor==null)||(cpf_recebedor==null)||(recebedor_e_comprador==null)){
-	    		alert("Informações incorretas.");
-	    	}else{
-	    		//entregar
-	    		entrega['gps']="localizacao do gps";
-	    		entrega['data_hora_entrega'] ="28-10-2015";
-	    		entrega['status'] ="entregue";
-	    		entrega['recebedor'] = recebedor;
-	    		entrega['cpf_recebedor'] = cpf_recebedor;
-	    		entrega['recebedor_e_comprador'] = recebedor_e_comprador;
-
-				xmlHttp.open("POST",window.location.protocol + "//" + window.location.host + "/api/logistics/", true);
-  				xmlHttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-  				xmlHttp.send(JSON.stringify(entrega));    		
-  				window.location.replace("logistica.html");
-    		}
+			if (recebedor != null) {
+				var cpf_recebedor = prompt("Digite o CPF do recebedor:", "");
+    			if(cpf_recebedor!=null){
+    				var recebedor_e_comprador=prompt("O recebedor é o comprador? <SIM/NAO>", "");
+    				if (recebedor_e_comprador!=null){
+    					//entregar
+			    		//var nova_entrega=[];
+			    		//entrega['id'] = entrega[0].id;
+			    		//entrega['id_cliente'] = entrega[0].id_cliente;
+			    		//entrega['id_pedido'] = entrega[0].id_pedido;
+			    		entrega['gps']="localizacao do gps";
+			    		entrega['data_hora_entrega'] ="28-10-2015";
+			    		entrega['status'] ="entregue";
+			    		entrega['nome_recebedor'] = recebedor;
+			    		entrega['cpf_recebedor'] = cpf_recebedor;
+			    		entrega['recebedor_e_comprador'] = recebedor_e_comprador;
+			    		console.log(entrega);
+						xmlHttp.open("PUT",window.location.protocol + "//" + window.location.host + "/api/logistics/"+ entrega['id'], true);
+		  				xmlHttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+		  				xmlHttp.send(JSON.stringify(entrega));    	
+		  				alert("Pedido entregue com sucesso");
+		  				window.location.replace("logistica.html");
+    				}
+    			}
+    		}	
 		}
 	}
 	function entregar(id) {

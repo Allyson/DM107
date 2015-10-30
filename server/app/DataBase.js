@@ -770,11 +770,14 @@ function get_all_entregas(callback){
 	}
 }
 function get_entrega(id,callback){
+	console.log("GET_ENTREGA()");
 	try{
 		connection.query("SELECT * from logistica WHERE id=?",[id],function (err,result){
 			if (!err){
+				console.log("OK EM GET_ENTREGA()");
 				callback(result[0]);
 			}else{
+				console.log("ERRO em GET_ENTREGA()");
 				callback(null);
 			}
 		});
@@ -835,9 +838,7 @@ function get_last_entrega(callback){
 			"status VARCHAR (20),"
 */
 function post_entrega(json,callback){
-	if (json.nome == null){
-		callback(null);
-	}
+	console.log("POST_ENTREGA()");
 	try{               //    "INSERT INTO clientes (nome,endereco,telefone,email) VALUES (\"José\",\"Rua x\",\"353471-9666\",\"jose@inatel.br\")");
 		connection.query("INSERT INTO logistica (id_pedido,id_cliente,nome_recebedor,cpf_recebedor,recebedor_e_comprador,data_hora_entrega,gps,status) VALUES (?,?,?,?,?,?,?,?)",
 				[json.id_pedido,json.id_cliente,json.nome_recebedor,json.cpf_recebedor,json.recebedor_e_comprador,json.data_hora_entrega,json.gps,json.status],
@@ -858,11 +859,8 @@ function post_entrega(json,callback){
 	}
 }
 function put_entrega(id,json,callback){
-	console.log("id " + id);
-	console.log("json " + json);
-	if (json.nome == null){
-		callback(null);
-	}
+	console.log("PUT_ENTREGA()");
+	console.log(json);
 	try{               //    "INSERT INTO clientes (nome,endereco,telefone,email) VALUES (\"José\",\"Rua x\",\"353471-9666\",\"jose@inatel.br\")");
 		connection.query("UPDATE logistica SET id_pedido=?, id_cliente=?,nome_recebedor=?,cpf_recebedor=?,recebedor_e_comprador=?,data_hora_entrega=?,gps=?,status=? WHERE id=?",
 				[json.id_pedido,json.id_cliente,json.nome_recebedor,json.cpf_recebedor,json.recebedor_e_comprador,json.data_hora_entrega,json.gps,json.status,id],
@@ -870,10 +868,15 @@ function put_entrega(id,json,callback){
 					if (!err){
 						get_entrega(id,function(data){
 							if (data!=null){
+								console.log("PUT_ENTREGA OK");
 								callback(data);
+							}else{
+								console.log("Falha");
+								callback(null);
 							}
 						});
 					}else{
+						console.log ("Erro no PUT ENTREGA()");
 						callback(null);
 					}
 				});
@@ -924,4 +927,8 @@ module.exports = {init_database:init_database,
 		  delete_pedido:delete_pedido,
 		  get_item_from_pedido:get_item_from_pedido,
 		  post_item:post_item,
-		  get_all_entregas:get_all_entregas};
+		  get_all_entregas:get_all_entregas,
+		  post_entrega:post_entrega,
+		  get_entrega_by_id_pedido:get_entrega_by_id_pedido,
+		  put_entrega:put_entrega,
+		  get_entrega:get_entrega};
