@@ -14,7 +14,7 @@ app.get('/', function(req, res) {
 app.use('/api', require('./app/RestAPI.js'));
 
 var server = app.listen(8080, function() {
-	console.log("Server running at http://localhost:8080");
+	console.log("Server running at http://localhost:8085");
 });
 
 //INIT_DATABASE
