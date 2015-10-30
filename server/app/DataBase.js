@@ -50,6 +50,13 @@ http://vignette3.wikia.nocookie.net/wiisportsresortwalkthrough/images/6/60/No_Im
 	make_query("INSERT INTO itens (id_pedido,id_cliente,id_produto,quantidade) VALUES ('4','4','4','10')");
 	make_query("INSERT INTO itens (id_pedido,id_cliente,id_produto,quantidade) VALUES ('4','4','1','10')");
 	console.log("Creating fake data into \"itens\"...\n");
+
+	make_query("INSERT INTO logistica (id_pedido,id_cliente,nome_recebedor,cpf_recebedor,recebedor_e_comprador,data_hora_entrega,gps,status) VALUES ('1','1','Recebedor 1','000111222-33','0','','','pendente')");
+	make_query("INSERT INTO logistica (id_pedido,id_cliente,nome_recebedor,cpf_recebedor,recebedor_e_comprador,data_hora_entrega,gps,status) VALUES ('2','2','Recebedor 2','000111222-33','0','','','pendente')");
+	make_query("INSERT INTO logistica (id_pedido,id_cliente,nome_recebedor,cpf_recebedor,recebedor_e_comprador,data_hora_entrega,gps,status) VALUES ('3','3','Recebedor 3','000111222-33','0','','','pendente')");
+	make_query("INSERT INTO logistica (id_pedido,id_cliente,nome_recebedor,cpf_recebedor,recebedor_e_comprador,data_hora_entrega,gps,status) VALUES ('4','4','Recebedor 4','000111222-33','0','','','pendente')");
+	console.log("Creating fake data into \"logistica\"...\n");	
+
 }
 
 function create_database(err){
@@ -58,13 +65,14 @@ function create_database(err){
 	connection.query("USE loja",query_error());//using database
 	connection.query("CREATE TABLE logistica" +  
 			"(id INT NOT NULL AUTO_INCREMENT," +
-			"id_pedido INT NOT NULL," +
-			"id_cliente INT NOT NULL," + 
+			"id_pedido INT ," +
+			"id_cliente INT ," + 
 			"nome_recebedor VARCHAR(50)," +
 			"cpf_recebedor VARCHAR(15)," +
 			"recebedor_e_comprador TINYINT(1), " +
-			"data_hora_entrega DATE ," +
+			"data_hora_entrega VARCHAR(30) ," +
 			"gps VARCHAR(200)," +
+			"status VARCHAR(20),"+
 			"PRIMARY KEY(id))",query_error()); // Creating logistica table
 	console.log("Created table \"logistica\"...\n");
 	connection.query("CREATE TABLE clientes" +
@@ -97,6 +105,7 @@ function create_database(err){
 			"valor DECIMAL(10,2) NOT NULL,"+
 			"PRIMARY KEY(id))",query_error()); //Creating produtos table
 	console.log("Created table \"produtos\"...\n");
+
 }
 
 
@@ -127,7 +136,7 @@ function init_database(){
 	connection.connect(connect_mysql_error);
 	connection.query("USE loja",connect_db_error);
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////CLIENTES ////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -742,6 +751,160 @@ function delete_item(id,callback){
     		console.log("DB_EXCEPTION : " + ex);
 	}
 }
+////////////////////////////////////////////// LOGISTICA /////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function get_all_entregas(callback){
+	try{
+		connection.query("SELECT * from logistica",function (err,result){
+		if (!err){
+			callback(result);
+		}else{
+			callback(null);
+		}
+	});
+	}catch(ex){
+    		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+function get_entrega(id,callback){
+	try{
+		connection.query("SELECT * from logistica WHERE id=?",[id],function (err,result){
+			if (!err){
+				callback(result[0]);
+			}else{
+				callback(null);
+			}
+		});
+	}catch(ex){
+    		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+function get_entregas_by_id_cliente(id,callback){
+	try{
+		connection.query("SELECT * from logistica WHERE id_cliente=?",[id],function (err,result){
+			if (!err){
+				callback(result);
+			}else{
+				callback(null);
+			}
+		});
+	}catch(ex){
+		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+function get_entrega_by_id_pedido(id,callback){
+	try{
+		connection.query("SELECT * from logistica WHERE id_pedido=?",[id],function (err,result){
+			if (!err){
+				callback(result);
+			}else{
+				callback(null);
+			}
+		});
+	}catch(ex){
+		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+
+function get_last_entrega(callback){
+	try{
+		connection.query("SELECT * from logistica ORDER BY id DESC LIMIT 1",function (err,result){
+			if (!err){
+				callback(result[0]);
+			}else{
+				callback(null);
+			}
+		});
+	}catch(ex){
+    		console.log("DB_EXCEPTION : " + ex);
+	}
+
+}
+
+/*
+"id_pedido INT ," +
+			"id_cliente INT ," + 
+			"nome_recebedor VARCHAR(50)," +
+			"cpf_recebedor VARCHAR(15)," +
+			"recebedor_e_comprador TINYINT(1), " +
+			"data_hora_entrega VARCHAR(30) ," +
+			"gps VARCHAR(200)," +
+			"status VARCHAR (20),"
+*/
+function post_entrega(json,callback){
+	if (json.nome == null){
+		callback(null);
+	}
+	try{               //    "INSERT INTO clientes (nome,endereco,telefone,email) VALUES (\"José\",\"Rua x\",\"353471-9666\",\"jose@inatel.br\")");
+		connection.query("INSERT INTO logistica (id_pedido,id_cliente,nome_recebedor,cpf_recebedor,recebedor_e_comprador,data_hora_entrega,gps,status) VALUES (?,?,?,?,?,?,?,?)",
+				[json.id_pedido,json.id_cliente,json.nome_recebedor,json.cpf_recebedor,json.recebedor_e_comprador,json.data_hora_entrega,json.gps,json.status],
+				function(err,result){
+					if (!err){
+						get_last_entrega(function(data){
+							if (data != null){
+								callback(data);
+							}
+						});
+					}else{
+						callback(null);
+					}
+				});
+
+	}catch(ex){
+		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+function put_entrega(id,json,callback){
+	console.log("id " + id);
+	console.log("json " + json);
+	if (json.nome == null){
+		callback(null);
+	}
+	try{               //    "INSERT INTO clientes (nome,endereco,telefone,email) VALUES (\"José\",\"Rua x\",\"353471-9666\",\"jose@inatel.br\")");
+		connection.query("UPDATE logistica SET id_pedido=?, id_cliente=?,nome_recebedor=?,cpf_recebedor=?,recebedor_e_comprador=?,data_hora_entrega=?,gps=?,status=? WHERE id=?",
+				[json.id_pedido,json.id_cliente,json.nome_recebedor,json.cpf_recebedor,json.recebedor_e_comprador,json.data_hora_entrega,json.gps,json.status,id],
+				function(err,result){
+					if (!err){
+						get_entrega(id,function(data){
+							if (data!=null){
+								callback(data);
+							}
+						});
+					}else{
+						callback(null);
+					}
+				});
+
+	}catch(ex){
+		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+function delete_entrega(id,callback){
+	try{
+		var deleted='';
+		get_entrega(id,function(data){
+			if (data!=null){
+				deleted=data;
+			}else{
+				callback(null);
+			}
+		});
+
+		connection.query("DELETE from logistica WHERE id=?",[id],function (err,result){
+			if (!err){
+				callback(deleted);
+			}else{
+				callback(null);
+			}
+		});
+	}catch(ex){
+    		console.log("DB_EXCEPTION : " + ex);
+	}
+}
+
 module.exports = {init_database:init_database,
                   get_all_clientes:get_all_clientes,
 		  get_cliente:get_cliente,
@@ -760,4 +923,5 @@ module.exports = {init_database:init_database,
 		  put_pedido:put_pedido,
 		  delete_pedido:delete_pedido,
 		  get_item_from_pedido:get_item_from_pedido,
-		  post_item:post_item};
+		  post_item:post_item,
+		  get_all_entregas:get_all_entregas};

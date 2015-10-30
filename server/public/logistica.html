@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<script>
+	var xmlHttp = new XMLHttpRequest();
+	
+	var handler_get_entregas = function(){
+		if (xmlHttp.readyState == 4 && xmlHttp.status == 200){		
+			var entregas = JSON.parse(xmlHttp.responseText);
+
+			var tableBodyEl = document.querySelector("table#show_entregas>tbody");
+		    //var i=0, keys=[], key="", row={};
+			var col = 0;	
+			var row = 0;
+			var tr;	
+			entregas.forEach(function(x){
+				var descricao="";
+				if (x.data==null){
+					descricao = "Pedido " + x.id_pedido +" | Cliente " + x.id_cliente ;
+				}else{
+					descricao = "Pedido " + x.id_pedido +" | Cliente " + x.id_cliente + " | Data " + x.data;
+				}
+				var tr = document.createElement('tr');
+				//Criando Produto			
+				var td_descricao = document.createElement('td');
+				var td_status = document.createElement('td');
+				var td_entregar = document.createElement('td');
+
+				td_descricao.innerHTML=descricao;
+				td_status.innerHTML=x.status;
+				var b_entregar = document.createElement('button');
+				b_entregar.innerHTML="Entregar";
+				b_entregar.setAttribute("onclick","entregar("+x.id+")");
+				if (x.status !="pendente"){
+					b_entregar.setAttribute("enable",false);
+				}
+				td_entregar.appendChild(b_entregar);
+				tr.appendChild(td_descricao);
+				tr.appendChild(td_status);
+				tr.appendChild(td_entregar);
+				tableBodyEl.appendChild(tr);
+			});
+		}else{
+			alert("Nenhuma entrega encontrado");
+		}
+	}
+	var handler_entregar = function(){
+		if (xmlHttp.readyState == 4 && xmlHttp.status == 200){		
+			var entrega = JSON.parse(xmlHttp.responseText);
+			var recebedor = prompt("Digite o nome do recebedor:", "");
+    		var cpf_recebedor = prompt("Digite o CPF do recebedor:", "");
+    		var recebedor_e_comprador=prompt("O recebedor é o comprador? <SIM/NAO>", "");
+    	
+	    	if ((recebedor==null)||(cpf_recebedor==null)||(recebedor_e_comprador==null)){
+	    		alert("Informações incorretas.");
+	    	}else{
+	    		//entregar
+	    		entrega['gps']="localizacao do gps";
+	    		entrega['data_hora_entrega'] ="28-10-2015";
+	    		entrega['status'] ="entregue";
+	    		entrega['recebedor'] = recebedor;
+	    		entrega['cpf_recebedor'] = cpf_recebedor;
+	    		entrega['recebedor_e_comprador'] = recebedor_e_comprador;
+
+				xmlHttp.open("POST",window.location.protocol + "//" + window.location.host + "/api/logistics/", true);
+  				xmlHttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+  				xmlHttp.send(JSON.stringify(entrega));    		
+  				window.location.replace("logistica.html");
+    		}
+		}
+	}
+	function entregar(id) {
+		xmlHttp.open( "GET", window.location.protocol + "//" + window.location.host + "/api/logistics/"+id, false); // false for synchronous request
+			xmlHttp.onload = handler_entregar;  		
+			xmlHttp.send( null );
+    }
+	function show_all_entregas(){
+		xmlHttp.open( "GET", window.location.protocol + "//" + window.location.host + "/api/logistics/", false); // false for synchronous request
+		xmlHttp.onload = handler_get_entregas;  		
+		xmlHttp.send( null );
+	}
+
+	window.addEventListener( "load", show_all_entregas);
+</script>
+
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Logistica</title>
+
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+  </head>
+ <div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3 class="text-center">
+				Bem vindo ao departamento de logistica.
+			</h3>
+			<table id="show_entregas" width="100%" border="0" class="text-center">
+				<tbody>
+						<thead>
+						<tr>
+						<th class="text-center">
+							Descrição
+						</th>
+						<th class="text-center">
+							Status
+						</th>
+						<th class="text-center">
+							
+						</th>
+					</tr>
+					</thead>
+				</tbody>
+			</table>
+
+		</div>
+	</div>
+</div>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/scripts.js"></script>
+  </body>
+</html>

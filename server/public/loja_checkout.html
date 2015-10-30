@@ -14,8 +14,9 @@
 <script>
 	var xmlHttp = new XMLHttpRequest();
 	var carrinho=[];
+	var cliente={};
 
-	var handler = function(){
+	var trata_get_carrinho = function(){
 		if (xmlHttp.readyState == 4 && xmlHttp.status == 200){		
 			var produto = JSON.parse(xmlHttp.responseText);
 			carrinho.push(produto);
@@ -44,7 +45,7 @@
 	}
 	function get_carrinho_produtos(id){
 		xmlHttp.open( "GET", window.location.protocol + "//" + window.location.host + "/api/product/"+id, false); // false for synchronous request
-		xmlHttp.onload = handler;  		
+		xmlHttp.onload = trata_get_carrinho;  		
 		xmlHttp.send( null );
 	}
 
@@ -80,24 +81,58 @@
 		var result = document.cookie.split(';');
 		var aux = String(result).split('=');
 		var aux1 = String(aux[1]).split(',');
-		var aux2 = String(aux1[1]).split(':');
-		var nome = String(aux2[1]).substring(1,String(aux2[1].length-1));
+		var aux2 = String(aux1[0]).split(':');
+		cliente["id"] = String(aux2[1]).substring(1,String(aux2[1].length-1));
+		aux2 = String(aux1[1]).split(':');
+		cliente["nome"] = String(aux2[1]).substring(1,String(aux2[1].length-1));
 		aux2 = String(aux1[2]).split(':');
-		var endereco = String(aux2[1]).substring(1,String(aux2[1].length-1));
+		cliente["endereco"] = String(aux2[1]).substring(1,String(aux2[1].length-1));
 		aux2 = String(aux1[3]).split(':');
-		var telefone =String(aux2[1]).substring(1,String(aux2[1].length-1));
+		cliente["telefone"] =String(aux2[1]).substring(1,String(aux2[1].length-1));
 		aux2 = String(aux1[4]).split(':');
-		var email =String(aux2[1]).substring(1,String(aux2[1].length-1));
+		cliente["email"] =String(aux2[1]).substring(1,String(aux2[1].length-1));
 		document.getElementById("endereco").innerHTML="<h2 class='text-left' > Dados do cliente:</h2>" + 
-														"<h4 class='text-left'> Nome: " + nome + "</h4>" + 
-														"<h4 class='text-left'> Endereço: " + endereco + "</h4>" + 
-														"<h4 class='text-left'> Telefone: " + telefone + "</h4>" + 
-														"<h4 class='text-left'> E-Mail: " + email + "</h4>";
-
+														"<h4 class='text-left'> Nome: " + cliente["nome"] + "</h4>" + 
+														"<h4 class='text-left'> Endereço: " + cliente["endereco"] + "</h4>" + 
+														"<h4 class='text-left'> Telefone: " + cliente["telefone"] + "</h4>" + 
+														"<h4 class='text-left'> E-Mail: " + cliente["email"] + "</h4>";
+	}
+	function post_data(obj){
+  		xmlHttp.open("POST", window.location.protocol + "//" + window.location.host + "/api/order", true);
+  		xmlHttp.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+  		xmlHttp.send(JSON.stringify(obj));
+  		alert("Pedido cadastrado com sucesso");
+  		window.location.replace("loja.html");
 	}
 	function fechar(){
 		//cadastrar o pedido
-		
+		var i;
+		var currentdate = new Date();
+		var pedido={};
+
+		for(i=0;i<carrinho.length;i++){
+			if((document.getElementById('quantidade_'+carrinho[i].id).value=="")||
+				(document.getElementById('quantidade_'+carrinho[i].id).value==0)){
+				alert("Não é possivel efetuar o fechamento do carrinho com zero item\nPara excluir um item refaça a compra.")
+				return;
+			}
+		}
+		pedido["id_cliente"] = cliente["id"];
+		pedido["data"] = currentdate.getDate() + "/"
+                       + (currentdate.getMonth()+1)  + "/" 
+                       + currentdate.getFullYear() + " - "
+                       + currentdate.getHours() + ":"  
+                       + currentdate.getMinutes();
+        pedido["itens"] = [];
+        
+        for (i=0;i<carrinho.length;i++){
+        	pedido["itens"].push({
+        		"id_produto":carrinho[i].id,
+        		"quantidade":document.getElementById('quantidade_'+carrinho[i].id).value
+        	});	
+        }
+        post_data(pedido);
+        
 	}
 	window.addEventListener( "load", parameters);
 </script>

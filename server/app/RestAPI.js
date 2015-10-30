@@ -217,20 +217,11 @@ router.get('/order/:id', function(req, res) {
 
 router.post('/order', function(req, res) {
 	// db.init_database();
-
 	console.log("POST_ORDER()");
 	var pedido={"id_cliente":req.body.id_cliente,
 				"data":req.body.data
 			};
 	var i=0;
-	// for (i=0;i<req.body.itens.length;i++){
-	// 	itens.push({
-	// 		"id":req.body.itens[i].id,
-	// 		"id_clinete":req.body.itens[i].id_cliente,
-	// 		"id_pedido":req.body.itens[i].id_pedido,
-	// 		"id_produto":req.body.itens[i].id_produto,
-	// 		"quantidade":req.body.itens[i].quantidade
-	// 	});
 	
 	db.post_pedido(pedido,function(pedido){
 		if (pedido!=null){
@@ -294,6 +285,20 @@ router.delete('/order:id', function(req, res) {
 		}
 	});
 });
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////                           LOGISTICA
+///////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+router.get('/logistics/',function(req,res){
+	db.get_all_entregas(function(data){
+		if (data!=null){
+			res.writeHead(200, {'Content-Type' : 'x-application/json'});
+        	res.end(JSON.stringify(data));
+		}else{
+			console.log("Erro");
+			res.status(404).send('Not found!');
+		}
+	})
+});
 
 module.exports = router;
