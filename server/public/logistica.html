@@ -76,7 +76,7 @@
 		}
 	}
 	function entregar(id) {
-		xmlHttp.open( "GET", window.location.protocol + "//" + window.location.host + "/api/logistics/"+id, false); // false for synchronous request
+		xmlHttp.open( "GET", window.location.protocol + "//" + window.location.host + "/api/logistics/"+id, true); // false for synchronous request
 			xmlHttp.onload = handler_entregar;  		
 			xmlHttp.send( null );
     }

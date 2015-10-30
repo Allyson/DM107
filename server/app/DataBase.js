@@ -69,7 +69,7 @@ function create_database(err){
 			"id_cliente INT ," + 
 			"nome_recebedor VARCHAR(50)," +
 			"cpf_recebedor VARCHAR(15)," +
-			"recebedor_e_comprador TINYINT(1), " +
+			"recebedor_e_comprador VARCHAR(10), " +
 			"data_hora_entrega VARCHAR(30) ," +
 			"gps VARCHAR(200)," +
 			"status VARCHAR(20),"+
