@@ -3,7 +3,50 @@
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
+      google.setOnLoadCallback(get_all);
+      
+      var xmlHttp = new XMLHttpRequest();
+      
+var handler_get_entregas = function(){
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 200){    
+      var entregas = JSON.parse(xmlHttp.responseText);
+      var entregues=0;
+      var pendentes=0;
+      var total =0;
+      entregas.forEach(function(x){
+             if (x.status=="pendente"){
+              pendentes++;
+             }else if (x.status=="entregue"){
+                entregues++
+             }
+             total++;     
+      });
+    
+      console.log("Entregues ="+ entregues + "Pendentes = "+ pendentes);
+      var data = google.visualization.arrayToDataTable([
+        ['Logistica','%'],
+        ['Entregues',entregues],
+        ['Pendentes',pendentes]
+        ]);
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        var options = {
+          title: 'My Daily Activities'
+        };
+          chart.draw(data,options);
+    }else{
+      alert("Nenhuma entrega encontrado");
+    }
+  }
+
+
+      function get_all(){
+          xmlHttp.open( "GET", window.location.protocol + "//" + window.location.host + "/api/logistics/", false); // false for synchronous request
+            xmlHttp.onload = handler_get_entregas;      
+            xmlHttp.send( null );
+      }
+
+
       function drawChart() {
 
         var data = google.visualization.arrayToDataTable([
@@ -26,6 +69,6 @@
     </script>
   </head>
   <body>
-    <div id="piechart" style="width: 900px; height: 500px;"></div>
+    <div id="piechart" ></div>
   </body>
 </html>
