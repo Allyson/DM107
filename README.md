@@ -20,3 +20,9 @@ Aula (03/10)
  - Grails rest poc (Fazer o Download do jar)
  - www.editor.swagger.io #Criar documentação usando swagger
  -- Generate Server / Generate Client
+
+_Instrução para instalação:_
+* Download do projeto;
+* npm install 
+* apt-get install mysql-server mysql-client
+* configure o arquivo server/server.js com o usuario/senha corretos para acessar o banco
