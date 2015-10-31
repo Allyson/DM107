@@ -13,7 +13,7 @@ app.get('/', function(req, res) {
 //REST-API
 app.use('/api', require('./app/RestAPI.js'));
 
-var server = app.listen(8080, function() {
+var server = app.listen(8085, function() {
 	console.log("Server running at http://localhost:8085");
 });
 
